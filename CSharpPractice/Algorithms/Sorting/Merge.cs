@@ -16,7 +16,7 @@ namespace CSharpPractice.Algorithms.Sorting
         }
 
         /// <summary>
-        /// 
+        /// Divide into sub arrays => sort => merge sort
         /// </summary>
         /// <param name="arr">Array[left...right]</param>
         /// <param name="left">left index</param>

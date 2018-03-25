@@ -5,7 +5,7 @@ using NUnit.Framework;
 namespace Tests
 {
     [TestFixture]
-    class SortingTests
+    public class SortingTests
     {
         [Test]
         public void TestInsertionSort()
