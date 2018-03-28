@@ -50,9 +50,8 @@ namespace CSharpPractice.Algorithms.Sorting
             int i = 0, j = 0, k = left;
             while (i < a.Length && j < b.Length)
             {
-                if (a[i] <= b[j]) arr[k] = a[i++];
-                else              arr[k] = b[j++];
-                k++;
+                if (a[i] <= b[j]) arr[k++] = a[i++];
+                else              arr[k++] = b[j++];
             }
 
             // Merge and sort remaining elements of subarrays into intital array
