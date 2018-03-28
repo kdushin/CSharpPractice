@@ -13,7 +13,7 @@ namespace CSharpPractice.Algorithms.Sorting
         {
             if (array == null || array.Length == 0) throw new ArgumentNullException(nameof(array));
             for (var index = 0; index < array.Length; index++)
-            {
+            {  
                 var minIndex = IndexOfMinimum(array, index);
                 SwapItemsInArray(array, index, minIndex);
             }
