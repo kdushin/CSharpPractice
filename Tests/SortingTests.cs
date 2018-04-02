@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using CSharpPractice.Algorithms.Sorting;
 using NUnit.Framework;
 
@@ -81,15 +82,17 @@ namespace Tests
         [Test]
         public void TestCountNumberOfInversions()
         {
-            var arr = new int[] {3, 5, 2, 6, 4, 3};
-            NumberOfInversions.SortAndCountInversions(arr, 0, arr.Length);
+            var inputArr = new [] {3, 7, 8, 2, 6, 7};
+            Assert.That(NumberOfInversions.Count(inputArr), Is.EqualTo(6), "Wrong number of inversions in input array were counted");
+            Assert.That(inputArr, Is.EqualTo(new [] {2, 3, 6, 7, 7, 8}), "Input array wasn't sorted correctly");
         }
 
         [Test]
-        public void TestTemp()
+        public void TestCountNumberOfInversionsOdd()
         {
-            var arr = new int[] { 3, 5, 2, 6, 4, 3 };
-            Merge.Sort(arr);
+            var inputArr = new [] {3, 7, 8, 2, 6, 7, 1};
+            Assert.That(NumberOfInversions.Count(inputArr), Is.EqualTo(12), "Wrong number of inversions in input array were counted");
+            Assert.That(inputArr, Is.EqualTo(new [] {1, 2, 3, 6, 7, 7, 8}), "Input array wasn't sorted correctly");
         }
     }
 }
