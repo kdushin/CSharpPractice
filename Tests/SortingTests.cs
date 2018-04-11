@@ -94,5 +94,12 @@ namespace Tests
             Assert.That(NumberOfInversions.Count(inputArr), Is.EqualTo(12), "Wrong number of inversions in input array were counted");
             Assert.That(inputArr, Is.EqualTo(new [] {1, 2, 3, 6, 7, 7, 8}), "Input array wasn't sorted correctly");
         }
+
+        [Test]
+        public void TestQuickSort()
+        {
+            var inputArr = new [] {3, 7, 8, 2, 6, 7};
+            Quick.Sort(inputArr);
+        }
     }
 }

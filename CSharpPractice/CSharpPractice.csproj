@@ -50,6 +50,7 @@
     <Compile Include="Algorithms\Karatsuba.cs" />
     <Compile Include="Algorithms\Sorting\Insertion.cs" />
     <Compile Include="Algorithms\Sorting\Merge.cs" />
+    <Compile Include="Algorithms\Sorting\Quick.cs" />
     <Compile Include="Algorithms\Sorting\Selection.cs" />
     <Compile Include="Algorithms\Sorting\NumberOfInversions.cs" />
     <Compile Include="Program.cs" />
