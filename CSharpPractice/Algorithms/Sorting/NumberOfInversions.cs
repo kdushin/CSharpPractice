@@ -4,17 +4,17 @@ namespace CSharpPractice.Algorithms.Sorting
 {
     public class NumberOfInversions
     {
-        public static int Count(int[] arr)
+        public static long Count(int[] arr)
         {
             return Count(arr, 0, arr.Length - 1);
         }
 
-        private static int Count(int[] arr, int left, int right)
+        private static long Count(int[] arr, long left, long right)
         {
-            var count = 0;
+            long count = 0L;
             if (right > left)
             {
-                int middle = (right - left) / 2 + left;
+                long middle = (right - left) / 2L + left;
                 count += Count(arr, left, middle); // count left inversions recuresively
                 count += Count(arr, middle + 1, right); // count right inversions recuresively
                 count += MergeAndCount(arr, left, middle + 1, right); // count split inversions
@@ -23,11 +23,11 @@ namespace CSharpPractice.Algorithms.Sorting
             return count;
         }
 
-        private static int MergeAndCount(int[] arr, int left, int middle, int right)
+        private static long MergeAndCount(int[] arr, long left, long middle, long right)
         {
-            int invCount = 0;
-            var tempList = new List<int>(capacity: right);
-            int i = left, j = middle;
+            long invCount = 0L;
+            var tempList = new List<int>(capacity: (int)right);
+            long i = left, j = middle;
             while (i < middle && j <= right)
             {
                 if (arr[i] <= arr[j]) tempList.Add(arr[i++]);
@@ -41,7 +41,7 @@ namespace CSharpPractice.Algorithms.Sorting
             while (i < middle) tempList.Add(arr[i++]);
             while (j <= right) tempList.Add(arr[j++]);
 
-            int k = left;
+            long k = left;
             foreach (int item in tempList) arr[k++] = item;
 
             return invCount;
