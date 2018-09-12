@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.IO;
+using System.Linq;
 using CSharpPractice.Algorithms.Sorting;
 using NUnit.Framework;
 
@@ -26,8 +26,6 @@ namespace Tests
             Merge.Sort(unsortedArray);
             Assert.That(unsortedArray, Is.EqualTo(sortedArray));
         }
-
-        
 
         [Test]
         public void TestMergeSortOdd()
@@ -84,6 +82,7 @@ namespace Tests
         public void TestCountNumberOfInversions()
         {
             var inputArr = new [] {3, 7, 8, 2, 6, 7};
+            Assert.That(NumberOfInversions.Count(inputArr), Is.EqualTo(6), "Wrong number of inversions in input array were counted");
             Assert.That(NumberOfInversions.Count(inputArr), Is.EqualTo(6), "Wrong number of inversions in input array were counted");
             Assert.That(inputArr, Is.EqualTo(new [] {2, 3, 6, 7, 7, 8}), "Input array wasn't sorted correctly");
         }

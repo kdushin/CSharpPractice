@@ -2,45 +2,48 @@
 {
     public static class Quick
     {
-        public static void Sort(int[] arr)
+        public static void Sort(int[] arrayToSort)
         {
-            if (arr.Length == 1) return;
-            int p = ChoosePivot(arr, arr.Length);
-            Partition(arr, 0, arr.Length);
-            // recuresively sort 1st part
-            // recuresively sort 2nd part
-            
-            void Partition(int[] a, int left, int right)
+            var startIndex = 0;
+            var endIndex = arrayToSort.Length - 1;
+
+            QuickSortRecursive(arrayToSort, startIndex, endIndex);
+        }
+
+        private static void QuickSortRecursive(int[] arrayToSort, int startIndex, int endIndex)
+        {
+            if (startIndex < endIndex)
             {
-                int pivotIndex = left;
-                int i = left + 1;
-                for (int j = left + 1; j < right; j++)
+                var pivotIndex = Partition(arrayToSort, startIndex, endIndex);
+                QuickSortRecursive(arrayToSort, startIndex, pivotIndex - 1);
+                QuickSortRecursive(arrayToSort, pivotIndex + 1, endIndex);
+            }
+        }
+
+        private static int Partition(int[] arrayToSort, int startIndex, int endIndex)
+        {
+            var pivotIndex = endIndex;
+            var pivotValue = arrayToSort[pivotIndex];
+            var smallerPartitionEndIndex = startIndex - 1;
+            for (int currentPosition = startIndex; currentPosition < pivotIndex; currentPosition++)
+            {
+                if (arrayToSort[currentPosition] <= pivotValue)
                 {
-                    if (a[j] < a[pivotIndex])
-                    {
-                        SwapItemsInArray(a, j, i);
-                        i++;
-                    }
+                    SwapItemsInArray(arrayToSort, ++smallerPartitionEndIndex, currentPosition);
                 }
-                SwapItemsInArray(a, pivotIndex, i - 1);
             }
 
-            void SwapItemsInArray(int[] a, int leftIndex, int rightIndex)
-            {
-                int temp = a[leftIndex];
-                a[leftIndex] = a[rightIndex];
-                a[rightIndex] = temp;
-            }
-        }
+            pivotIndex = smallerPartitionEndIndex + 1;
+            SwapItemsInArray(arrayToSort, pivotIndex, endIndex);
 
-        private static int ChoosePivot(int[] arr, int length)
-        {
-            return arr[0];
+            return pivotIndex;
         }
-
-        private static void Partition(int[] arr, int left, int right)
+        
+        private static void SwapItemsInArray(int[] array, int firstIndex, int secondIndex)
         {
-            
+            var temp = array[firstIndex];
+            array[firstIndex] = array[secondIndex];
+            array[secondIndex] = temp;
         }
     }
 }
