@@ -1,9 +1,8 @@
 ﻿using System;
-using System.CodeDom;
 
-class Program {
-    
-    public int solution(int[] array)
+class Program 
+{
+    public static void Main(string[] args)
     {
         var deepestPitLength = DeepestPit(new[] {1, 5, 4, 3, 2, 3, 5, 6, 1, 4, 8, 9});
     }
