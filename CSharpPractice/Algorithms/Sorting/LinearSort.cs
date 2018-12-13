@@ -5,7 +5,7 @@ using System.Linq;
 namespace CSharpPractice.Algorithms.Sorting
 {
     // TODO: Don't be lazy. Add tests for this!
-    public class LinearSort
+    public class LinearSorting
     {
         public int[] NaiveCountingSort(int[] array, int range)
         {

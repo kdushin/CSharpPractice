@@ -4,30 +4,30 @@ namespace CSharpPractice.Algorithms.Sorting
 {
     public class NumberOfInversions
     {
-        public static long Count(int[] arr)
+        public static int Count(int[] arr)
         {
             return Count(arr, 0, arr.Length - 1);
         }
 
-        private static long Count(int[] arr, long left, long right)
+        private static int Count(int[] arr, int left, int right)
         {
-            long count = 0L;
+            int count = 0;
             if (right > left)
             {
-                long middle = (right - left) / 2L + left;
-                count += Count(arr, left, middle); // count left inversions recuresively
-                count += Count(arr, middle + 1, right); // count right inversions recuresively
+                int middle = (right - left) / 2 + left;
+                count += Count(arr, left, middle); // count left inversions recursively
+                count += Count(arr, middle + 1, right); // count right inversions recursively
                 count += MergeAndCount(arr, left, middle + 1, right); // count split inversions
             }
 
             return count;
         }
 
-        private static long MergeAndCount(int[] arr, long left, long middle, long right)
+        private static int MergeAndCount(int[] arr, int left, int middle, int right)
         {
-            long invCount = 0L;
+            int invCount = 0;
             var tempList = new List<int>(capacity: (int)right);
-            long i = left, j = middle;
+            int i = left, j = middle;
             while (i < middle && j <= right)
             {
                 if (arr[i] <= arr[j]) tempList.Add(arr[i++]);

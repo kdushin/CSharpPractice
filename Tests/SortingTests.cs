@@ -1,6 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
 using CSharpPractice.Algorithms.Sorting;
 using NUnit.Framework;
 
@@ -15,14 +13,14 @@ namespace Tests
             var expectedArray = new[] {7, 9, 11, 22, 42, 88, 99};
             var actualArray = new[] {22, 11, 99, 88, 9, 7, 42};
             Insertion.Sort(actualArray);
-            Assert.That(actualArray, Is.EqualTo(expectedArray));
+            Assert.That(actualArray, Is.EquivalentTo(expectedArray));
         }
 
         [Test]
         public void TestMergeSortEven()
         {
-            var unsortedArray = new int[] {1, 3, 2, 4, 5, 8, 6, 7};
-            var sortedArray = new int[] {1, 2, 3, 4, 5, 6, 7, 8};
+            var unsortedArray = new[] {1, 3, 2, 4, 5, 8, 6, 7};
+            var sortedArray = new[] {1, 2, 3, 4, 5, 6, 7, 8};
             Merge.Sort(unsortedArray);
             Assert.That(unsortedArray, Is.EqualTo(sortedArray));
         }
@@ -30,8 +28,8 @@ namespace Tests
         [Test]
         public void TestMergeSortOdd()
         {
-            var unsortedArray = new int[] {1, 3, 2, 11, 4, 5, 8, 6, 7};
-            var sortedArray = new int[] {1, 2, 3, 4, 5, 6, 7, 8, 11};
+            var unsortedArray = new[] {1, 3, 2, 11, 4, 5, 8, 6, 7};
+            var sortedArray = new[] {1, 2, 3, 4, 5, 6, 7, 8, 11};
             Merge.Sort(unsortedArray);
             Assert.That(unsortedArray, Is.EqualTo(sortedArray));
         }
@@ -39,8 +37,8 @@ namespace Tests
         [Test]
         public void TestMergeSortRepeatedNumbers()
         {
-            var unsortedArray = new int[] {1, 3, 2, 4, 5, 8, 2, 6, 1, 7};
-            var sortedArray = new int[] {1, 1, 2, 2, 3, 4, 5, 6, 7, 8};
+            var unsortedArray = new[] {1, 3, 2, 4, 5, 8, 2, 6, 1, 7};
+            var sortedArray = new[] {1, 1, 2, 2, 3, 4, 5, 6, 7, 8};
             Merge.Sort(unsortedArray);
             Assert.That(unsortedArray, Is.EqualTo(sortedArray));
         }
@@ -95,10 +93,21 @@ namespace Tests
         }
 
         [Test]
-        public void TestQuickSort()
+        public void TestQuickSortEven()
         {
             var inputArr = new [] {3, 7, 8, 2, 6, 7};
+            var expectedArr = new[] {2, 3, 6, 7, 7, 8};
             Quick.Sort(inputArr);
+            Assert.That(inputArr, Is.EquivalentTo(expectedArr));
+        }
+        
+        [Test]
+        public void TestQuickSortOdd()
+        {
+            var inputArr = new [] {3, 7, 8, 0, 2, 6, 7};
+            var expectedArr = new[] {0, 2, 3, 6, 7, 7, 8};
+            Quick.Sort(inputArr);
+            Assert.That(inputArr, Is.EquivalentTo(expectedArr));
         }
     }
 }

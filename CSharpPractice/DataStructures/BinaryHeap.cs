@@ -5,11 +5,16 @@ namespace CSharpPractice.DataStructures
     {
         public int this[int i]
         {
-            get { return _arr[i - 1]; }
-            set { _arr[i - 1] = value; }
+            get => _arr[i - 1];
+            set => _arr[i - 1] = value;
         }
+        
+        /// <summary>
+        /// For testing purpose only
+        /// </summary>
+        public int[] GetInnerArray => _arr;
 
-        private int[] _arr;
+        private readonly int[] _arr;
         private int _heapSize;
 
         public BinaryHeap(params int[] arr)
@@ -58,7 +63,7 @@ namespace CSharpPractice.DataStructures
             this[r] = temp;
         }
 
-        public void BuildHeap()
+        public void Build()
         {
             _heapSize = _arr.Length;
             for (int i = _arr.Length / 2; i >= 1; i--)
@@ -69,7 +74,7 @@ namespace CSharpPractice.DataStructures
 
         public void Sort()
         {
-            BuildHeap();
+            Build();
             for (int i = _arr.Length; i >= 2; i--)
             {
                 SwapItems(1, i);
