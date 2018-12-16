@@ -1,7 +1,11 @@
-﻿namespace CSharpPractice.Algorithms.Sorting
+﻿using System;
+
+namespace CSharpPractice.Algorithms.Sorting
 {
     public static class Quick
     {
+        private static Random _randomizer = new Random();
+        
         public static void Sort(int[] arrayToSort)
         {
             var startIndex = 0;
@@ -20,21 +24,21 @@
             }
         }
 
-        private static int Partition(int[] arrayToSort, int startIndex, int endIndex)
+        private static int Partition(int[] arrayToSort, int i, int j)
         {
-            var pivotIndex = endIndex;
-            var pivotValue = arrayToSort[pivotIndex];
-            var smallerPartitionEndIndex = startIndex - 1;
-            for (int currentPosition = startIndex; currentPosition < pivotIndex; currentPosition++)
+            var pivotIndex = ChoosePivot(startIndex: i, endIndex: j);
+            var pivot = arrayToSort[pivotIndex];
+            var smallerPartitionEndIndex = i - 1;
+            for (int currentPosition = i; currentPosition < pivotIndex; currentPosition++)
             {
-                if (arrayToSort[currentPosition] <= pivotValue)
+                if (arrayToSort[currentPosition] <= pivot)
                 {
                     SwapItemsInArray(arrayToSort, ++smallerPartitionEndIndex, currentPosition);
                 }
             }
 
             pivotIndex = smallerPartitionEndIndex + 1;
-            SwapItemsInArray(arrayToSort, pivotIndex, endIndex);
+            SwapItemsInArray(arrayToSort, pivotIndex, j);
 
             return pivotIndex;
         }
@@ -44,6 +48,11 @@
             var temp = array[firstIndex];
             array[firstIndex] = array[secondIndex];
             array[secondIndex] = temp;
+        }
+
+        private static int ChoosePivot(int startIndex, int endIndex)
+        {
+            return _randomizer.Next(startIndex, endIndex);
         }
     }
 }
