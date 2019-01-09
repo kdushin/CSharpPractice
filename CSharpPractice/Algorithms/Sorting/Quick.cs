@@ -11,20 +11,27 @@ namespace CSharpPractice.Algorithms.Sorting
             var startIndex = 0;
             var endIndex = arrayToSort.Length - 1;
 
-            QuickSortRecursive(arrayToSort, startIndex, endIndex);
+            QuickSortInternal(arrayToSort, startIndex, endIndex);
         }
 
-        private static void QuickSortRecursive(int[] arrayToSort, int startIndex, int endIndex)
+        private static void QuickSortInternal(int[] arrayToSort, int startIndex, int endIndex)
         {
             if (startIndex < endIndex)
             {
                 var pivotIndex = Partition(arrayToSort, startIndex, endIndex);
-                QuickSortRecursive(arrayToSort, startIndex, pivotIndex - 1);
-                QuickSortRecursive(arrayToSort, pivotIndex + 1, endIndex);
+                QuickSortInternal(arrayToSort, startIndex, pivotIndex - 1);
+                QuickSortInternal(arrayToSort, pivotIndex + 1, endIndex);
             }
         }
 
-        private static int Partition(int[] arrayToSort, int i, int j)
+        /// <summary>
+        /// Chooses random pivot point and rearrange array[i...j] in the following parts:
+        /// 1) items less than a pivot
+        /// 2) pivot
+        /// 3) items greater than a pivot 
+        /// </summary>
+        /// <returns></returns>
+        public static int Partition(int[] arrayToSort, int i, int j)
         {
             int pivotIndex = ChoosePivot(startIndex: i, endIndex: j);
             SwapItemsInArray(arrayToSort, pivotIndex, i);

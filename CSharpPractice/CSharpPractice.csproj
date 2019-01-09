@@ -50,6 +50,7 @@
   <ItemGroup>
     <Compile Include="Algorithms\BinarySearch\BinarySearch.cs" />
     <Compile Include="Algorithms\Karatsuba.cs" />
+    <Compile Include="Algorithms\OrderStatistics.cs" />
     <Compile Include="Algorithms\Sorting\Insertion.cs" />
     <Compile Include="Algorithms\Sorting\LinearSort.cs" />
     <Compile Include="Algorithms\Sorting\Merge.cs" />
