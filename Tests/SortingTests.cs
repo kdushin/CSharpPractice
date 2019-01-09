@@ -13,7 +13,7 @@ namespace Tests
             var expectedArray = new[] {7, 9, 11, 22, 42, 88, 99};
             var actualArray = new[] {22, 11, 99, 88, 9, 7, 42};
             Insertion.Sort(actualArray);
-            Assert.That(actualArray, Is.EquivalentTo(expectedArray));
+            Assert.That(actualArray, Is.EqualTo(expectedArray));
         }
 
         [Test]
