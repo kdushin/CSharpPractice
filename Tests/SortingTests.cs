@@ -98,7 +98,7 @@ namespace Tests
             var inputArr = new [] {3, 7, 8, 2, 6, 7};
             var expectedArr = new[] {2, 3, 6, 7, 7, 8};
             Quick.Sort(inputArr);
-            Assert.That(inputArr, Is.EquivalentTo(expectedArr));
+            Assert.That(inputArr, Is.EqualTo(expectedArr));
         }
         
         [Test]
@@ -107,7 +107,7 @@ namespace Tests
             var inputArr = new [] {3, 7, 8, 0, 2, 6, 7};
             var expectedArr = new[] {0, 2, 3, 6, 7, 7, 8};
             Quick.Sort(inputArr);
-            Assert.That(inputArr, Is.EquivalentTo(expectedArr));
+            Assert.That(inputArr, Is.EqualTo(expectedArr));
         }
     }
 }

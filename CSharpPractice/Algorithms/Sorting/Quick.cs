@@ -26,21 +26,23 @@ namespace CSharpPractice.Algorithms.Sorting
 
         private static int Partition(int[] arrayToSort, int i, int j)
         {
-            var pivotIndex = ChoosePivot(startIndex: i, endIndex: j);
-            var pivot = arrayToSort[pivotIndex];
-            var smallerPartitionEndIndex = i - 1;
-            for (int currentPosition = i; currentPosition < pivotIndex; currentPosition++)
+            int pivotIndex = ChoosePivot(startIndex: i, endIndex: j);
+            SwapItemsInArray(arrayToSort, pivotIndex, i);
+            pivotIndex = i;
+            
+            int partitionLessThanPivotEndIndex = i + 1;
+            for (int currentPosition = i + 1; currentPosition <= j; currentPosition++)
             {
-                if (arrayToSort[currentPosition] <= pivot)
+                if (arrayToSort[currentPosition] <= arrayToSort[pivotIndex])
                 {
-                    SwapItemsInArray(arrayToSort, ++smallerPartitionEndIndex, currentPosition);
+                    SwapItemsInArray(arrayToSort, partitionLessThanPivotEndIndex++, currentPosition);
                 }
             }
 
-            pivotIndex = smallerPartitionEndIndex + 1;
-            SwapItemsInArray(arrayToSort, pivotIndex, j);
-
-            return pivotIndex;
+            int sortedPivotIndex = partitionLessThanPivotEndIndex - 1;
+            SwapItemsInArray(arrayToSort, pivotIndex, sortedPivotIndex);
+            
+            return sortedPivotIndex;
         }
         
         private static void SwapItemsInArray(int[] array, int firstIndex, int secondIndex)
