@@ -6,8 +6,8 @@
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProjectGuid>{CB137842-87F9-4ED3-A04F-28341EEB38A4}</ProjectGuid>
     <OutputType>Exe</OutputType>
-    <RootNamespace>CSharpPractice</RootNamespace>
-    <AssemblyName>CSharpPractice</AssemblyName>
+    <RootNamespace>AlgorithmBasics</RootNamespace>
+    <AssemblyName>AlgorithmBasics</AssemblyName>
     <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>

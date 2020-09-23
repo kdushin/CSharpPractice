@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace CSharpPractice.Algorithms.Sorting
+namespace AlgorithmBasics.Algorithms.Sorting
 {
     public class NumberOfInversions
     {

@@ -1,5 +1,5 @@
 ﻿using System;
-using CSharpPractice.Algorithms.Sorting;
+using AlgorithmBasics.Algorithms.Sorting;
 using NUnit.Framework;
 
 namespace Tests

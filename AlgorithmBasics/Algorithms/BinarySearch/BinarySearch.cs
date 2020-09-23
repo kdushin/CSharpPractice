@@ -1,4 +1,4 @@
-﻿namespace CSharpPractice.Algorithms.BinarySearch
+﻿namespace AlgorithmBasics.Algorithms.BinarySearch
 {
     public class BinarySearch
     {

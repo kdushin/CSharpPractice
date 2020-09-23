@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace CSharpPractice.Algorithms.Sorting
+namespace AlgorithmBasics.Algorithms.Sorting
 {
     public static class Merge
     {
@@ -46,7 +46,7 @@ namespace CSharpPractice.Algorithms.Sorting
             for (int index = 0; index < a.Length; index++) a[index] = arr[left + index];
             for (int index = 0; index < b.Length; index++) b[index] = arr[middle + 1 + index];
 
-            // Sort and merge data from two subarrays into initial array
+            // Sort and merge data from two sub arrays into initial array
             int i = 0, j = 0, k = left;
             while (i < a.Length && j < b.Length)
             {
@@ -54,7 +54,7 @@ namespace CSharpPractice.Algorithms.Sorting
                 else              arr[k++] = b[j++];
             }
 
-            // Merge and sort remaining elements of subarrays into intital array
+            // Merge and sort remaining elements of sub arrays into initial array
             while (i < a.Length) arr[k++] = a[i++];
             while (j < b.Length) arr[k++] = b[j++];
         }

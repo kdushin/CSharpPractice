@@ -2,7 +2,7 @@
 using System.Numerics;
 
 
-namespace CSharpPractice.Algorithms
+namespace AlgorithmBasics.Algorithms
 {
     public static class Karatsuba
     {

@@ -1,5 +1,5 @@
 ﻿
-namespace CSharpPractice.DataStructures
+namespace AlgorithmBasics.DataStructures
 {
     public class BinaryHeap
     {

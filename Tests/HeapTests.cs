@@ -1,4 +1,4 @@
-﻿using CSharpPractice.DataStructures;
+﻿using AlgorithmBasics.DataStructures;
 using NUnit.Framework;
 
 namespace Tests

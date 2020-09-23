@@ -1,4 +1,4 @@
-﻿using CSharpPractice.Algorithms.BinarySearch;
+﻿using AlgorithmBasics.Algorithms.BinarySearch;
 using NUnit.Framework;
 
 namespace Tests

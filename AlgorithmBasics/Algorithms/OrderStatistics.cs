@@ -1,6 +1,6 @@
-using CSharpPractice.Algorithms.Sorting;
+using AlgorithmBasics.Algorithms.Sorting;
 
-namespace CSharpPractice.Algorithms
+namespace AlgorithmBasics.Algorithms
 {
     public static class OrderStatistics
     {

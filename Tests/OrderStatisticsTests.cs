@@ -1,4 +1,4 @@
-using CSharpPractice.Algorithms;
+using AlgorithmBasics.Algorithms;
 using NUnit.Framework;
 
 namespace Tests

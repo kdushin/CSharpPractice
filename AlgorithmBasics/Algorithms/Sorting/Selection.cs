@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace CSharpPractice.Algorithms.Sorting
+namespace AlgorithmBasics.Algorithms.Sorting
 {
     public static class Selection
     {

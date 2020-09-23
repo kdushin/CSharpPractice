@@ -2,7 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace CSharpPractice.Algorithms.Sorting
+namespace AlgorithmBasics.Algorithms.Sorting
 {
     // TODO: Don't be lazy. Add tests for this!
     public class LinearSorting

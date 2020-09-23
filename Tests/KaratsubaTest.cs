@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Numerics;
-using CSharpPractice.Algorithms;
+using AlgorithmBasics.Algorithms;
 using NUnit.Framework;
 
 namespace Tests
