@@ -49,6 +49,8 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Algorithms\BinarySearch\BinarySearch.cs" />
+    <Compile Include="Algorithms\Graphs\MinimumCutsProblem.cs" />
+    <Compile Include="Algorithms\Graphs\Vertex.cs" />
     <Compile Include="Algorithms\Karatsuba.cs" />
     <Compile Include="Algorithms\OrderStatistics.cs" />
     <Compile Include="Algorithms\Sorting\Insertion.cs" />
@@ -58,6 +60,7 @@
     <Compile Include="Algorithms\Sorting\Selection.cs" />
     <Compile Include="Algorithms\Sorting\NumberOfInversions.cs" />
     <Compile Include="DataStructures\BinaryHeap.cs" />
+    <Compile Include="DataStructures\Graphs\Graph.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
@@ -65,6 +68,29 @@
     <None Include=".gitignore" />
     <None Include="App.config" />
     <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="CourseTasks\kargerMinCut.txt">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="CourseTasks\testCase1.txt">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="CourseTasks\testCase2.txt">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="CourseTasks\testCase3.txt">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="CourseTasks\testCase4.txt">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="CourseTasks\testCase5.txt">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="CourseTasks\testCase6.txt">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
