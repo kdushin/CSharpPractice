@@ -1,13 +1,5 @@
-﻿#define DEBUGX
-
-using System;
+﻿using System;
 using System.Collections.Generic;
-using System.Diagnostics.CodeAnalysis;
-using System.IO;
-using System.Linq;
-using System.Security.Cryptography;
-using System.Text;
-using System.Threading.Tasks;
 using AlgorithmBasics.Algorithms.Graphs;
 
 namespace AlgorithmBasics
@@ -16,12 +8,16 @@ namespace AlgorithmBasics
     {
         public static void Main(string[] args)
         {
-            Dictionary<int, List<int>> dict = MinimumCuts.ParseGraph("CourseTasks\\kargerMinCut.txt");
-         
-            Console.WriteLine($"{DateTime.UtcNow} - Execute algorithm!");
-            var result = MinimumCuts.Find(dict);
-            Console.WriteLine($"Final minCut = {result} found!");
-            Console.WriteLine($"{DateTime.UtcNow} - Finish!");
+            for (int i = 0; i < 1; i++)
+            {
+                Dictionary<int, List<int>> dict = MinimumCuts.ParseGraph("CourseTasks\\kargerMinCut.txt");
+
+                Console.WriteLine($"Started! {DateTime.Now}");
+                int result = MinimumCuts.FindWithAdjacencyList(dict);
+                Console.WriteLine($"Finished! {DateTime.Now}");
+                Console.WriteLine($"MinCut = {result}");
+            }
+            Console.ReadLine();
         }
         
     }

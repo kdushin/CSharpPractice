@@ -49,6 +49,8 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Algorithms\BinarySearch\BinarySearch.cs" />
+    <Compile Include="Algorithms\Graphs\AdjacencyList.cs" />
+    <Compile Include="Algorithms\Graphs\IGraph.cs" />
     <Compile Include="Algorithms\Graphs\MinimumCutsProblem.cs" />
     <Compile Include="Algorithms\Graphs\Vertex.cs" />
     <Compile Include="Algorithms\Karatsuba.cs" />

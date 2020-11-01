@@ -2,7 +2,6 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Security.Cryptography;
 using System.Threading.Tasks;
 
 namespace AlgorithmBasics.Algorithms.Graphs
@@ -19,52 +18,67 @@ namespace AlgorithmBasics.Algorithms.Graphs
                 if (x.Any())
                 {
                     int[] arr = x.Select(int.Parse).ToArray();
-
-                    if (!result.ContainsKey(arr[0]))
+                    var adjs = arr.Skip(1).ToList();
+                    if (result.ContainsKey(arr[0]))
                     {
-                        result.Add(arr[0], new List<int>());
+                        result[arr[0]].AddRange(adjs);
                     }
-                    for (int i = 1; i < arr.Length; i++)
+                    else
                     {
-                        if (arr[0] > arr[i]) continue;
+                        result.Add(arr[0], adjs);
+                    }
                     
-                        result[arr[0]].Add(arr[i]);
-                    }
                 }
             }
 
             return result;
         }
-        
-        public static int Find(Dictionary<int, List<int>> graph)
+
+        public static int FindWithAdjacencyList(Dictionary<int, List<int>> graph)
         {
             var totalMinCut = int.MaxValue;
+            
             var iterationsCount = (int) Math.Ceiling(Math.Pow(graph.Keys.Count, 2) * Math.Log(graph.Keys.Count));
+            Console.WriteLine($"Iterations count - {iterationsCount}");
 
             var sync = new object();
-            
-            var parallelOptions = new ParallelOptions {MaxDegreeOfParallelism = 8};
 
-            Parallel.For(0, iterationsCount, parallelOptions, i =>
+            Parallel.For(0, iterationsCount, i =>
             {
-                var rng = new RNGCryptoServiceProvider();
-                var localDict = Vertex.Init(graph);
-                for (int count = localDict.Count; count > 2; count--)
+                var r = new Random();
+                if (i == 100_000)
                 {
-                    var mainId = NextInt(rng, 0, count);
-                    var mainVx = localDict[mainId];
-                    var vxToDeleteId = NextInt(rng, 0, mainVx.AdjacentVertices.Count);
-
-                    var vxToDelete = mainVx.AdjacentVertices[vxToDeleteId];
-
-                    mainVx.MergeWith(vxToDelete);
-                    localDict.Remove(vxToDelete);
+                    Console.WriteLine($"{DateTime.Now}. 100 000 iterations!");
                 }
 
-                var minCut = localDict[0].AdjacentVertices.Count;
-                if (minCut < totalMinCut)
+                var adjList = AdjacencyList.Init(graph);
+
+                List<int> nodesActiveLst = Enumerable.Range(1, adjList.Nodes.Count).ToList();
+                
+                // TODO: add queue of random vertices
+                // Shuffle(nodesActiveLst);
+                // var nodesActive = new Queue<int>();
+                // nodesActiveLst.ForEach(p => nodesActive.Enqueue(p));
+
+                while (nodesActiveLst.Count > 2)
                 {
-                    lock (sync)
+                    var deleteInt = r.Next(nodesActiveLst.Count);
+                    var nodeToDelete = nodesActiveLst[deleteInt];
+
+                    List<int> nodeWithEdges = adjList.Nodes[nodeToDelete];
+
+                    // Console.WriteLine($"Get delete node index - {deleteNodeIndex}");
+                    int targetNode = nodeWithEdges[r.Next(nodeWithEdges.Count)];
+
+                    nodesActiveLst.RemoveAt(deleteInt);
+
+                    adjList.MergeNodes(targetNode, nodeToDelete);
+                }
+
+                int minCut = adjList.Nodes[nodesActiveLst[0]].Count;
+                lock (sync)
+                {
+                    if (minCut < totalMinCut)
                     {
                         totalMinCut = minCut;
                     }
@@ -73,13 +87,21 @@ namespace AlgorithmBasics.Algorithms.Graphs
             
             return totalMinCut;
         }
-        
-        private static int NextInt(RNGCryptoServiceProvider rng, int min, int max)
-        {
-            byte[] buffer = new byte[4];
-            rng.GetBytes(buffer);
-            return new Random(BitConverter.ToInt32(buffer, 0)).Next(min, max);
-        }
+
+        // private static Random rng = new Random();
+        //
+        // public static void Shuffle<T>(IList<T> list)
+        // {
+        //     int n = list.Count;
+        //     while (n > 1)
+        //     {
+        //         n--;
+        //         int k = rng.Next(n + 1);
+        //         T value = list[k];
+        //         list[k] = list[n];
+        //         list[n] = value;
+        //     }
+        // }
     }
     
 }
