@@ -17,20 +17,30 @@ namespace AlgorithmBasics
         public static void Main(string[] args)
         {
             var sw = new Stopwatch();
-            Console.WriteLine("Starting to separate file into chunks");
-            sw.Start();
-            string chunksPath = SeparateFileIntoChunks(@"C:\Projects\CSharpPractice\AlgorithmBasics\CourseTasks\unsortedBigFile.txt", 90);
-            sw.Stop();
-            Console.WriteLine($"Finished to separate file into chunks and sort. Time - {sw.ElapsedMilliseconds}");
-
-            // MergeChunks(chunksPath);
+            int chunkSizeMb = 100;
+            Console.WriteLine($"{DateTime.UtcNow:MM/dd/yyyy hh:mm:ss.fff tt}. Starting to separate file into chunks");
             
+            sw.Start();
+            string chunksPath = SeparateFileIntoChunks(@"C:\Projects\CSharpPractice\AlgorithmBasics\CourseTasks\unsortedBigFile.txt", chunkSizeMb);
+            sw.Stop();
+            
+            var sortMilliseconds = sw.ElapsedMilliseconds;
+            Console.WriteLine($"{DateTime.UtcNow:MM/dd/yyyy hh:mm:ss.fff tt}. Finished to separate file into chunks (size = {chunkSizeMb} mb) and sort. Elapsed time ms: {sw.ElapsedMilliseconds}");
+
+            Console.WriteLine($"{DateTime.UtcNow:MM/dd/yyyy hh:mm:ss.fff tt}. Starting to merge sorted chunks");
+            
+            sw.Restart();
+            MergeChunks(chunksPath);
+            sw.Stop();
+            
+            Console.WriteLine($"{DateTime.UtcNow:MM/dd/yyyy hh:mm:ss.fff tt}. All chunks were merged. Elapsed time ms: {sw.ElapsedMilliseconds}");
+
             using (var process = Process.GetCurrentProcess())
             {
                 Console.WriteLine();
                 Console.WriteLine("Application stopped!");
-                Console.WriteLine("Execution time: {0:G}\r\nGen-0_count: {1}, Gen-1_count: {2}, Gen-2_count: {3}\r\nPeak WorkSet: {4:n0} \r\n",
-                    sw.ElapsedMilliseconds,
+                Console.WriteLine("Execution time: {0:G} ms\r\nGen-0_count: {1}, Gen-1_count: {2}, Gen-2_count: {3}\r\nPeak WorkSet: {4:n0} \r\n",
+                    sw.ElapsedMilliseconds + sortMilliseconds,
                     GC.CollectionCount(0).ToString(),
                     GC.CollectionCount(1).ToString(),
                     GC.CollectionCount(2).ToString(),
@@ -40,7 +50,6 @@ namespace AlgorithmBasics
 
         private static string SeparateFileIntoChunks(string filePath, int chunkSizeMb)
         {
-            var stopWatch = new Stopwatch();
             long chunkMaxSize = 1024 * 1024 * chunkSizeMb; // MB
             using (var streamReader = new StreamReader(filePath))
             {
@@ -54,7 +63,7 @@ namespace AlgorithmBasics
                     
                     if (streamReader.BaseStream.Position - previousChunkPosition >= chunkMaxSize && streamReader.Peek() >= 0)
                     {
-                        SortAndWriteDataChunk(strings, chunkNumber, stopWatch);
+                        SortAndWriteDataChunk(strings, chunkNumber);
                         strings = new List<string>();
                         previousChunkPosition = streamReader.BaseStream.Position;
                         chunkNumber++;
@@ -63,7 +72,7 @@ namespace AlgorithmBasics
 
                 if (strings.Any())
                 {
-                    SortAndWriteDataChunk(strings, chunkNumber, stopWatch);
+                    SortAndWriteDataChunk(strings, chunkNumber);
                     strings = null;
                 }
 
@@ -71,10 +80,8 @@ namespace AlgorithmBasics
             }
         }
 
-        // inject into separate function
-        private static void SortAndWriteDataChunk(List<string> chunkData, long chunkNumber, Stopwatch sw)
+        private static void SortAndWriteDataChunk(List<string> chunkData, long chunkNumber)
         {
-            sw.Restart();
             var result = new SortedDictionary<string, List<int>>();
             foreach (string line in chunkData)
             {
@@ -94,44 +101,131 @@ namespace AlgorithmBasics
                 foreach (KeyValuePair<string,List<int>> kvp in result)
                 {
                     kvp.Value.Sort();
-                    streamWriter.WriteLine($"{kvp.Key}.{string.Join(",", kvp.Value)}");
+                    foreach (int i in kvp.Value)
+                    {
+                        streamWriter.WriteLine($"{kvp.Key}.{i}");   
+                    }
                 }
             }
-            sw.Stop();
-            Console.WriteLine($"Chunk {chunkNumber} was saved. Elapsed milliseconds - {sw.ElapsedMilliseconds}");
         }
 
-        private static string GetChunkFileName(long chunkNumber)
+        private static void MergeChunks(string outputPath)
+        {
+            Queue<string> filesQueue = new Queue<string>();
+            foreach (string file in Directory.EnumerateFiles(outputPath))
+            {
+                filesQueue.Enqueue(file);
+            }
+
+            while (filesQueue.Count >= 2)
+            {
+                filesQueue.Enqueue(MergeFiles(filesQueue.Dequeue(), filesQueue.Dequeue()));
+            }
+        }
+
+        private static string MergeFiles(string path1, string path2)
+        {
+            string chunkNumber = GetChunkNumber(path1) + GetChunkNumber(path2);
+            string resultFilePath = $"{ChunksPath}\\{GetChunkFileName(chunkNumber)}";
+            
+            using (var reader1 = new StreamReader(path1))
+            using (var reader2 = new StreamReader(path2))
+            using (var outputWriter = new StreamWriter(resultFilePath))
+            {
+                int count = 0;
+                string line1 = reader1.EndOfStream ? null : reader1.ReadLine();
+                string line2 = reader2.EndOfStream ? null : reader2.ReadLine();
+                while (line1 != null && line2 != null)
+                {
+                    if (string.CompareOrdinal(line1, line2) <= 0)
+                    {
+                        outputWriter.WriteLine(line1);
+                        line1 = reader1.EndOfStream ? null : reader1.ReadLine();
+                    }
+                    else
+                    {
+                        outputWriter.WriteLine(line2);
+                        line2 = reader2.EndOfStream ? null : reader2.ReadLine();
+                    }
+
+                    count++;
+                }
+
+                if (line1 != null) { outputWriter.WriteLine(line1); }
+                if (line2 != null) { outputWriter.WriteLine(line2); }
+
+                while (!reader1.EndOfStream)
+                {
+                    outputWriter.WriteLine(reader1.ReadLine());
+                }
+                while (!reader2.EndOfStream)
+                {
+                    outputWriter.WriteLine(reader2.ReadLine());
+                }
+            }
+            File.Delete(path1);
+            File.Delete(path2);
+            return resultFilePath;
+        }
+
+        private static void TestResults(string path)
+        {
+            var dict = new Dictionary<string, long>();
+            using (var reader = new StreamReader(path))
+            {
+                var prevLine = reader.ReadLine();
+                AddOrUpdate(dict, prevLine);
+                while (!reader.EndOfStream)
+                {
+                    var currLine = reader.ReadLine();
+                    if (currLine == null)
+                    {
+                        throw new Exception();
+                    }
+                    AddOrUpdate(dict, currLine);
+                }
+            }
+
+            Console.WriteLine("Resulted dictionary");
+            foreach (KeyValuePair<string,long> keyValuePair in dict)
+            {
+                Console.WriteLine($"Key - {keyValuePair.Key}. Count - {keyValuePair.Value}");
+            }
+        }
+
+        private static void AddOrUpdate(Dictionary<string, long> dict, string line)
+        {
+            if (dict.ContainsKey(line))
+            {
+                dict[line]++;
+            }
+            else
+            {
+                dict.Add(line, 1);
+            }
+        }
+
+        private static string GetChunkNumber(string path)
+        {
+            // path template C:\output\Chunk-1.txt
+            return path.Split('\\')
+                       .Last()
+                       .Split('.')
+                       .First()
+                       .Split('-')
+                       .Last();
+        }
+        
+        private static string GetChunkFileName(string chunkNumber)
         {
             return $"Chunk-{chunkNumber}.txt";
         }
         
-        private static void MergeChunks(string outputPath)
+        private static string GetChunkFileName(long chunkNumber)
         {
-            string[] chunkPaths = Directory.GetFiles(outputPath); 
-            var readers = new StreamReader[chunkPaths.Length];
-            for (int i = 0; i < chunkPaths.Length; i++)
-            {
-                readers[i] = new StreamReader(chunkPaths[i]);
-            }
-
-            var x = new List<KeyValuePair<string, List<int>>>();
-            
-            foreach (StreamReader reader in readers)
-            {
-                string line = reader.ReadLine();
-                string[] rawElements = line.Split('.');
-                var z = x.FirstOrDefault(e => e.Key == rawElements[0]);
-                
-            }
-
-
-            using (var writer = new StreamWriter("C:\\output\\sortedResult.txt"))
-            {
-                
-            }
+            return $"Chunk-{chunkNumber}.txt";
         }
-        
+
         private static void GenerateFile(string filePath, long linesCount)
         {
             using (var streamWriter = new StreamWriter(filePath))
