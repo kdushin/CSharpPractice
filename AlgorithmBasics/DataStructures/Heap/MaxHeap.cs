@@ -1,23 +1,20 @@
 ﻿
-namespace AlgorithmBasics.DataStructures
+namespace AlgorithmBasics.DataStructures.Heap
 {
-    public class BinaryHeap
+    public class MaxHeap
     {
-        public int this[int i]
+        private int this[int i]
         {
             get => _arr[i - 1];
             set => _arr[i - 1] = value;
         }
         
-        /// <summary>
-        /// For testing purpose only
-        /// </summary>
         public int[] GetInnerArray => _arr;
 
         private readonly int[] _arr;
         private int _heapSize;
 
-        public BinaryHeap(params int[] arr)
+        public MaxHeap(params int[] arr)
         {
             _arr = arr;
         }
@@ -38,7 +35,6 @@ namespace AlgorithmBasics.DataStructures
             {
                 largestIndex = leftIndex;
             }
-
             else
             {
                 largestIndex = parentIndex;

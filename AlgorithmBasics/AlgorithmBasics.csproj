@@ -62,8 +62,9 @@
     <Compile Include="Algorithms\Sorting\Quick.cs" />
     <Compile Include="Algorithms\Sorting\Selection.cs" />
     <Compile Include="Algorithms\Sorting\NumberOfInversions.cs" />
-    <Compile Include="DataStructures\BinaryHeap.cs" />
     <Compile Include="DataStructures\Graphs\Graph.cs" />
+    <Compile Include="DataStructures\Heap\MaxHeap.cs" />
+    <Compile Include="DataStructures\Heap\MinHeap.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

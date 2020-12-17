@@ -4,6 +4,7 @@ using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using AlgorithmBasics.Algorithms.Graphs;
+using AlgorithmBasics.DataStructures.Heap;
 
 namespace AlgorithmBasics
 {
@@ -21,18 +22,20 @@ namespace AlgorithmBasics
             Console.WriteLine($"{DateTime.UtcNow:MM/dd/yyyy hh:mm:ss.fff tt}. Starting to separate file into chunks");
             
             sw.Start();
-            string chunksPath = SeparateFileIntoChunks(@"C:\Projects\CSharpPractice\AlgorithmBasics\CourseTasks\unsortedBigFile.txt", chunkSizeMb);
+            // string chunksPath = SeparateFileIntoChunks(@"C:\Projects\CSharpPractice\AlgorithmBasics\CourseTasks\unsortedBigFile.txt", chunkSizeMb);
+            // string chunksPath = SeparateFileIntoChunks(@"C:\Projects\CSharpPractice\AlgorithmBasics\CourseTasks\unsortedSmallFile.txt", chunkSizeMb);
+            // string chunksPath = SeparateFileIntoChunks("C:\\Projects\\CSharpPractice\\AlgorithmBasics\\CourseTasks\\BigFileSameString.txt", chunkSizeMb);
             sw.Stop();
             
             var sortMilliseconds = sw.ElapsedMilliseconds;
             Console.WriteLine($"{DateTime.UtcNow:MM/dd/yyyy hh:mm:ss.fff tt}. Finished to separate file into chunks (size = {chunkSizeMb} mb) and sort. Elapsed time ms: {sw.ElapsedMilliseconds}");
 
             Console.WriteLine($"{DateTime.UtcNow:MM/dd/yyyy hh:mm:ss.fff tt}. Starting to merge sorted chunks");
-            
             sw.Restart();
-            MergeChunks(chunksPath);
-            sw.Stop();
             
+            MergeChunks(ChunksPath);
+            
+            sw.Stop();
             Console.WriteLine($"{DateTime.UtcNow:MM/dd/yyyy hh:mm:ss.fff tt}. All chunks were merged. Elapsed time ms: {sw.ElapsedMilliseconds}");
 
             using (var process = Process.GetCurrentProcess())
@@ -82,6 +85,9 @@ namespace AlgorithmBasics
 
         private static void SortAndWriteDataChunk(List<string> chunkData, long chunkNumber)
         {
+            var sw = new Stopwatch();
+            sw.Start();
+            
             var result = new SortedDictionary<string, List<int>>();
             foreach (string line in chunkData)
             {
@@ -95,7 +101,6 @@ namespace AlgorithmBasics
                     result.Add(lineObjects[1], new List<int>{int.Parse(lineObjects[0])});
                 }
             }
-            // TODO: just write sorted tuple
             using (var streamWriter = new StreamWriter($"{ChunksPath}{GetChunkFileName(chunkNumber)}"))
             {
                 foreach (KeyValuePair<string,List<int>> kvp in result)
@@ -103,69 +108,63 @@ namespace AlgorithmBasics
                     kvp.Value.Sort();
                     foreach (int i in kvp.Value)
                     {
-                        streamWriter.WriteLine($"{kvp.Key}.{i}");   
+                        streamWriter.WriteLine($"{i:D20}.{kvp.Key}");   
                     }
                 }
             }
+            
+            sw.Stop();
+            Console.WriteLine($"{chunkNumber} was wrote. TimeMs - {sw.ElapsedMilliseconds}");
         }
 
         private static void MergeChunks(string outputPath)
         {
-            Queue<string> filesQueue = new Queue<string>();
-            foreach (string file in Directory.EnumerateFiles(outputPath))
-            {
-                filesQueue.Enqueue(file);
-            }
+            string[] filePaths = Directory.GetFiles(outputPath);
+            var readersHeap = new MinHeap<ChunkReaderHelper>(filePaths.Length);
 
-            while (filesQueue.Count >= 2)
+            foreach (string filePath in filePaths)
             {
-                filesQueue.Enqueue(MergeFiles(filesQueue.Dequeue(), filesQueue.Dequeue()));
-            }
-        }
-
-        private static string MergeFiles(string path1, string path2)
-        {
-            string chunkNumber = GetChunkNumber(path1) + GetChunkNumber(path2);
-            string resultFilePath = $"{ChunksPath}\\{GetChunkFileName(chunkNumber)}";
-            
-            using (var reader1 = new StreamReader(path1))
-            using (var reader2 = new StreamReader(path2))
-            using (var outputWriter = new StreamWriter(resultFilePath))
-            {
-                int count = 0;
-                string line1 = reader1.EndOfStream ? null : reader1.ReadLine();
-                string line2 = reader2.EndOfStream ? null : reader2.ReadLine();
-                while (line1 != null && line2 != null)
+                var reader = new StreamReader(filePath);
+                if (!reader.EndOfStream)
                 {
-                    if (string.CompareOrdinal(line1, line2) <= 0)
+                    readersHeap.Insert(new ChunkReaderHelper(reader, filePath));
+                }
+            }
+            
+            using (var writer = new StreamWriter($"{ChunksPath}{Guid.NewGuid():N}.txt"))
+            {
+                ChunkReaderHelper min = readersHeap.ExtractMin();
+                while (min != default)
+                {
+                    WriteLine(writer, min.GetLine());
+                    min.SetLine();
+                    if (min.HasRecords)
                     {
-                        outputWriter.WriteLine(line1);
-                        line1 = reader1.EndOfStream ? null : reader1.ReadLine();
+                        readersHeap.Insert(min);
                     }
                     else
                     {
-                        outputWriter.WriteLine(line2);
-                        line2 = reader2.EndOfStream ? null : reader2.ReadLine();
+                        min.Reader.Close();
+                        //File.Delete(min.FilePath);
                     }
-
-                    count++;
-                }
-
-                if (line1 != null) { outputWriter.WriteLine(line1); }
-                if (line2 != null) { outputWriter.WriteLine(line2); }
-
-                while (!reader1.EndOfStream)
-                {
-                    outputWriter.WriteLine(reader1.ReadLine());
-                }
-                while (!reader2.EndOfStream)
-                {
-                    outputWriter.WriteLine(reader2.ReadLine());
+                    min = readersHeap.ExtractMin();
                 }
             }
-            File.Delete(path1);
-            File.Delete(path2);
-            return resultFilePath;
+        }
+        
+        private static void WriteLine(StreamWriter writer, string line)
+        {
+            string[] parts = line.Split('.');
+            writer.WriteLine($"{parts[0].TrimStart('0')}.{parts[1]}");
+        }
+        
+        private static int CompareKeyValuePairs(KeyValuePair<long, string> first, KeyValuePair<long, string> second)
+        {
+            if (first.Value != second.Value)
+            {
+                return string.CompareOrdinal(first.Value, second.Value);
+            }
+            return first.Key.CompareTo(second.Key);
         }
 
         private static void TestResults(string path)
@@ -205,22 +204,6 @@ namespace AlgorithmBasics
             }
         }
 
-        private static string GetChunkNumber(string path)
-        {
-            // path template C:\output\Chunk-1.txt
-            return path.Split('\\')
-                       .Last()
-                       .Split('.')
-                       .First()
-                       .Split('-')
-                       .Last();
-        }
-        
-        private static string GetChunkFileName(string chunkNumber)
-        {
-            return $"Chunk-{chunkNumber}.txt";
-        }
-        
         private static string GetChunkFileName(long chunkNumber)
         {
             return $"Chunk-{chunkNumber}.txt";
@@ -247,48 +230,6 @@ namespace AlgorithmBasics
             return new string(buffer);
         }
         
-        // private static IDictionary<string, uint> GetTopWordsParallelMapReduce()  
-        // {
-        //     var result = new Dictionary<string, uint>(StringComparer.InvariantCultureIgnoreCase);
-        //     Parallel.ForEach(
-        //         // FILE PATH
-        //         source: File.ReadLines("InputFile.FullName"),
-        //         parallelOptions: new ParallelOptions { MaxDegreeOfParallelism = Environment.ProcessorCount },
-        //         localInit: () => new Dictionary<string, uint>(StringComparer.InvariantCultureIgnoreCase),
-        //         body: (line, state, index, localDic) =>
-        //         {
-        //             foreach (var word in line.Split(Separators, StringSplitOptions.RemoveEmptyEntries))
-        //             {
-        //                 if (!IsValidWord(word)) { continue; }
-        //                 TrackWordsOccurrence(localDic, word);
-        //             }
-        //             return localDic;
-        //         },
-        //         localFinally: localDic =>
-        //         {
-        //             lock (result)
-        //             {
-        //                 foreach (var pair in localDic)
-        //                 {
-        //                     var key = pair.Key;
-        //                     if (result.ContainsKey(key))
-        //                     {
-        //                         result[key] += pair.Value;
-        //                     }
-        //                     else
-        //                     {
-        //                         result[key] = pair.Value;
-        //                     }
-        //                 }
-        //             }
-        //         }
-        //     );
-        //
-        //     return result
-        //         .OrderByDescending(kv => kv.Value)
-        //         .Take((int)TopCount)
-        //         .ToDictionary(kv => kv.Key, kv => kv.Value);
-        // }
 
         private void Foo()
         {
@@ -302,6 +243,39 @@ namespace AlgorithmBasics
                 Console.WriteLine($"MinCut = {result}");
             }
             Console.ReadLine();
+        }
+    }
+
+    public class ChunkReaderHelper : IComparable<ChunkReaderHelper>
+    {
+        public const string End = "EmptyReader";
+
+        public StreamReader Reader { get; }
+
+        public string FilePath { get; }
+
+        public bool HasRecords => _line != End;
+
+        private string _line = null;
+
+        public ChunkReaderHelper(StreamReader reader, string filePath)
+        {
+            Reader = reader;
+            _line = reader.ReadLine();
+            FilePath = filePath;
+        }
+
+        public string GetLine() => _line;
+
+        public void SetLine()
+        {
+            if (_line == End) { return; }
+            _line = Reader.EndOfStream ? End : Reader.ReadLine();
+        }
+
+        public int CompareTo(ChunkReaderHelper other)
+        {
+            return string.CompareOrdinal(GetLine(), other.GetLine());
         }
     }
 }
