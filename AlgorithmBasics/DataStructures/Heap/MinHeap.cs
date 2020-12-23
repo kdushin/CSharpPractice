@@ -50,7 +50,7 @@ namespace AlgorithmBasics.DataStructures.Heap
                     Array.Resize(ref _arr, 2 * (_arr.Length + 1));
                 }
                 this[_heapSize] = item;
-                Heapify(Parent(_heapSize));
+                HeapifyUp(_heapSize);
             }
         }
 
@@ -60,12 +60,25 @@ namespace AlgorithmBasics.DataStructures.Heap
             if (_heapSize < 1) { return default; }
             
             this[1] = this[_heapSize--];
-            Heapify(1);
+            HeapifyDown(1);
             
             return result;
         }
         
-        private void Heapify(int parentIndex)
+        private void HeapifyUp(int itemIndex)
+        {
+            if (itemIndex != 1)
+            {
+                int parentIndex = Parent(itemIndex);
+                if (this[itemIndex].CompareTo(this[parentIndex]) < 0)
+                {
+                    SwapItems(parentIndex, itemIndex);
+                    HeapifyUp(parentIndex);
+                }
+            }
+        }
+
+        private void HeapifyDown(int parentIndex)
         {
             int minIndex = parentIndex;
             while (true)

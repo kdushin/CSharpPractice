@@ -55,7 +55,6 @@
     <Compile Include="Algorithms\Graphs\Vertex.cs" />
     <Compile Include="Algorithms\Karatsuba.cs" />
     <Compile Include="Algorithms\OrderStatistics.cs" />
-    <Compile Include="Algorithms\Sorting\ExternalSorting.cs" />
     <Compile Include="Algorithms\Sorting\Insertion.cs" />
     <Compile Include="Algorithms\Sorting\LinearSort.cs" />
     <Compile Include="Algorithms\Sorting\Merge.cs" />
@@ -67,6 +66,7 @@
     <Compile Include="DataStructures\Heap\MinHeap.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="TestAssignments\ExternalSortAssignment.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include=".gitignore" />
