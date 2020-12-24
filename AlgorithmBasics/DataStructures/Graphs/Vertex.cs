@@ -1,7 +1,7 @@
 using System.Collections.Generic;
 using System.Linq;
 
-namespace AlgorithmBasics.Algorithms.Graphs
+namespace AlgorithmBasics.DataStructures.Graphs
 {
     public class Vertex
     {

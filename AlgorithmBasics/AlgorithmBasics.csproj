@@ -49,10 +49,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Algorithms\BinarySearch\BinarySearch.cs" />
-    <Compile Include="Algorithms\Graphs\AdjacencyList.cs" />
-    <Compile Include="Algorithms\Graphs\IGraph.cs" />
     <Compile Include="Algorithms\Graphs\MinimumCutsProblem.cs" />
-    <Compile Include="Algorithms\Graphs\Vertex.cs" />
     <Compile Include="Algorithms\Karatsuba.cs" />
     <Compile Include="Algorithms\OrderStatistics.cs" />
     <Compile Include="Algorithms\Sorting\Insertion.cs" />
@@ -61,7 +58,9 @@
     <Compile Include="Algorithms\Sorting\Quick.cs" />
     <Compile Include="Algorithms\Sorting\Selection.cs" />
     <Compile Include="Algorithms\Sorting\NumberOfInversions.cs" />
-    <Compile Include="DataStructures\Graphs\Graph.cs" />
+    <Compile Include="DataStructures\Graphs\AdjacencyList.cs" />
+    <Compile Include="DataStructures\Graphs\IGraph.cs" />
+    <Compile Include="DataStructures\Graphs\Vertex.cs" />
     <Compile Include="DataStructures\Heap\MaxHeap.cs" />
     <Compile Include="DataStructures\Heap\MinHeap.cs" />
     <Compile Include="Program.cs" />
@@ -74,25 +73,25 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="CourseTasks\kargerMinCut.txt">
+    <Content Include="CourseTasks\KargerMinCutSamples\kargerMinCut.txt">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <Content Include="CourseTasks\testCase1.txt">
+    <Content Include="CourseTasks\KargerMinCutSamples\testCase1.txt">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <Content Include="CourseTasks\testCase2.txt">
+    <Content Include="CourseTasks\KargerMinCutSamples\testCase2.txt">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <Content Include="CourseTasks\testCase3.txt">
+    <Content Include="CourseTasks\KargerMinCutSamples\testCase3.txt">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <Content Include="CourseTasks\testCase4.txt">
+    <Content Include="CourseTasks\KargerMinCutSamples\testCase4.txt">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <Content Include="CourseTasks\testCase5.txt">
+    <Content Include="CourseTasks\KargerMinCutSamples\testCase5.txt">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <Content Include="CourseTasks\testCase6.txt">
+    <Content Include="CourseTasks\KargerMinCutSamples\testCase6.txt">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
   </ItemGroup>

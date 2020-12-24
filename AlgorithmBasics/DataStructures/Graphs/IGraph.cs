@@ -1,5 +1,5 @@
 
-namespace AlgorithmBasics.Algorithms.Graphs
+namespace AlgorithmBasics.DataStructures.Graphs
 {
     // TODO: Add iterator and IGraph implementations
     public interface IGraph 
