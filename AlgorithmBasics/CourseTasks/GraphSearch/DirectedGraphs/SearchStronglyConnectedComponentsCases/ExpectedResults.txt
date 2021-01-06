@@ -1,0 +1,6 @@
+BaseCase.txt  - Answer: 3,3,3,0,0
+TestCase1.txt - Answer: 3,3,3,0,0
+TestCase2.txt - Answer: 3,3,2,0,0
+TestCase3.txt - Answer: 3,3,1,1,0
+TestCase4.txt - Answer: 7,1,0,0,0
+TestCase5.txt - Answer: 6,3,2,1,0

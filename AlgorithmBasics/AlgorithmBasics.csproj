@@ -49,6 +49,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Algorithms\BinarySearch\BinarySearch.cs" />
+    <Compile Include="Algorithms\Graphs\GraphSearch.cs" />
     <Compile Include="Algorithms\Graphs\MinimumCutsProblem.cs" />
     <Compile Include="Algorithms\Karatsuba.cs" />
     <Compile Include="Algorithms\OrderStatistics.cs" />
@@ -58,9 +59,9 @@
     <Compile Include="Algorithms\Sorting\Quick.cs" />
     <Compile Include="Algorithms\Sorting\Selection.cs" />
     <Compile Include="Algorithms\Sorting\NumberOfInversions.cs" />
-    <Compile Include="DataStructures\Graphs\AdjacencyList.cs" />
-    <Compile Include="DataStructures\Graphs\IGraph.cs" />
-    <Compile Include="DataStructures\Graphs\Vertex.cs" />
+    <Compile Include="DataStructures\Graph\AdjacencyList.cs" />
+    <Compile Include="DataStructures\Graph\GraphImplementations\DirectedGraphList.cs" />
+    <Compile Include="DataStructures\Graph\IGraph.cs" />
     <Compile Include="DataStructures\Heap\MaxHeap.cs" />
     <Compile Include="DataStructures\Heap\MinHeap.cs" />
     <Compile Include="Program.cs" />
@@ -73,6 +74,17 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="CourseTasks\GraphSearch\DirectedGraphs\SearchStronglyConnectedComponentsCases\BaseCase.txt" />
+    <Content Include="CourseTasks\GraphSearch\DirectedGraphs\SearchStronglyConnectedComponentsCases\ExpectedResults.txt" />
+    <Content Include="CourseTasks\GraphSearch\DirectedGraphs\SearchStronglyConnectedComponentsCases\SCC.txt" />
+    <Content Include="CourseTasks\GraphSearch\DirectedGraphs\SearchStronglyConnectedComponentsCases\TestCase1.txt" />
+    <Content Include="CourseTasks\GraphSearch\DirectedGraphs\SearchStronglyConnectedComponentsCases\TestCase2.txt" />
+    <Content Include="CourseTasks\GraphSearch\DirectedGraphs\SearchStronglyConnectedComponentsCases\TestCase3.txt" />
+    <Content Include="CourseTasks\GraphSearch\DirectedGraphs\SearchStronglyConnectedComponentsCases\TestCase4.txt" />
+    <Content Include="CourseTasks\GraphSearch\DirectedGraphs\SearchStronglyConnectedComponentsCases\TestCase5.txt" />
+    <Content Include="CourseTasks\GraphSearch\DirectedGraphs\SmallGraphAllConnected.txt" />
+    <Content Include="CourseTasks\GraphSearch\DirectedGraphs\README.txt" />
+    <Content Include="CourseTasks\GraphSearch\DirectedGraphs\TestCase1.txt" />
     <Content Include="CourseTasks\KargerMinCutSamples\kargerMinCut.txt">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>

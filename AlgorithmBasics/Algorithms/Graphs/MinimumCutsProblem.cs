@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
-using AlgorithmBasics.DataStructures.Graphs;
+using AlgorithmBasics.DataStructures.Graph;
 
 namespace AlgorithmBasics.Algorithms.Graphs
 {
@@ -40,27 +40,16 @@ namespace AlgorithmBasics.Algorithms.Graphs
             var totalMinCut = int.MaxValue;
             
             var iterationsCount = (int) Math.Ceiling(Math.Pow(graph.Keys.Count, 2) * Math.Log(graph.Keys.Count));
-            Console.WriteLine($"Iterations count - {iterationsCount}");
-
+            
             var sync = new object();
-
             Parallel.For(0, iterationsCount, i =>
             {
                 var r = new Random();
-                if (i == 100_000)
-                {
-                    Console.WriteLine($"{DateTime.Now}. 100 000 iterations!");
-                }
 
                 var adjList = AdjacencyList.Init(graph);
 
                 List<int> nodesActiveLst = Enumerable.Range(1, adjList.Nodes.Count).ToList();
                 
-                // TODO: add queue of random vertices
-                // Shuffle(nodesActiveLst);
-                // var nodesActive = new Queue<int>();
-                // nodesActiveLst.ForEach(p => nodesActive.Enqueue(p));
-
                 while (nodesActiveLst.Count > 2)
                 {
                     var deleteInt = r.Next(nodesActiveLst.Count);
@@ -68,7 +57,6 @@ namespace AlgorithmBasics.Algorithms.Graphs
 
                     List<int> nodeWithEdges = adjList.Nodes[nodeToDelete];
 
-                    // Console.WriteLine($"Get delete node index - {deleteNodeIndex}");
                     int targetNode = nodeWithEdges[r.Next(nodeWithEdges.Count)];
 
                     nodesActiveLst.RemoveAt(deleteInt);
@@ -88,21 +76,6 @@ namespace AlgorithmBasics.Algorithms.Graphs
             
             return totalMinCut;
         }
-
-        // private static Random rng = new Random();
-        //
-        // public static void Shuffle<T>(IList<T> list)
-        // {
-        //     int n = list.Count;
-        //     while (n > 1)
-        //     {
-        //         n--;
-        //         int k = rng.Next(n + 1);
-        //         T value = list[k];
-        //         list[k] = list[n];
-        //         list[n] = value;
-        //     }
-        // }
     }
     
 }
