@@ -14,8 +14,8 @@ namespace AlgorithmBasics
     {
         public static void Main(string[] args)
         {
-            var path = @"file path";
-            TestCalculateFinishingTimes(path);
+            var path = @"C:\Projects\CSharpPractice\AlgorithmBasics\CourseTasks\GraphSearch\DirectedGraphs\SearchStronglyConnectedComponentsCases\SCC.txt";
+            TestFindStronglyConnectedComponents(path);
         }
 
         
@@ -120,7 +120,7 @@ namespace AlgorithmBasics
             }
         }
 
-        private static void TestCalculateFinishingTimes(string path)
+        private static void TestFindStronglyConnectedComponents(string path)
         {
             IDirectedGraphWithReversed<int> graph;
             using (var reader = new StreamReader(path))
@@ -128,19 +128,16 @@ namespace AlgorithmBasics
                 graph = GraphHelper.ParseFromText(reader, saveReversedVersion: true);
             }
 
-            List<int> sortedKeys = GraphSearch.FindStronglyConnectedComponents(graph).Values.ToList();
-            sortedKeys.Sort((x, y) => y.CompareTo(x));
+            var results = GraphSearch.FindStronglyConnectedComponents(graph);
+            var biggestSccs = results.OrderByDescending(r => r.Count)
+                                                 .Take(6)
+                                                 .ToList();
             
-            Console.WriteLine($"Strongly connected components number - {sortedKeys.Count}!");
-            int i = 1;
-            foreach (int sccVerticesCount in sortedKeys)
+            Console.WriteLine($"Strongly connected components number - {biggestSccs.Count}!");
+            for (var i = 0; i < biggestSccs.Count; i++)
             {
-                if (i == 6)
-                {
-                    break;
-                }
-                Console.WriteLine($"SCC #{i}: {sccVerticesCount}");
-                i++;
+                var sccVertices = biggestSccs[i];
+                Console.WriteLine($"SCC #{i+1}: {sccVertices.Count}");
             }
         }
     }

@@ -34,6 +34,11 @@ namespace AlgorithmBasics.DataStructures.Heap
             }
         }
 
+        public bool IsEmpty()
+        {
+            return _heapSize <= 0;
+        }
+
         public void Insert(T item)
         {
             if (_heapSize == 0)
@@ -64,17 +69,23 @@ namespace AlgorithmBasics.DataStructures.Heap
             
             return result;
         }
-        
+
         private void HeapifyUp(int itemIndex)
         {
-            if (itemIndex != 1)
+            while (true)
             {
-                int parentIndex = Parent(itemIndex);
-                if (this[itemIndex].CompareTo(this[parentIndex]) < 0)
+                if (itemIndex != 1)
                 {
-                    SwapItems(parentIndex, itemIndex);
-                    HeapifyUp(parentIndex);
+                    int parentIndex = Parent(itemIndex);
+                    if (this[itemIndex].CompareTo(this[parentIndex]) < 0)
+                    {
+                        SwapItems(parentIndex, itemIndex);
+                        itemIndex = parentIndex;
+                        continue;
+                    }
                 }
+
+                break;
             }
         }
 
@@ -111,6 +122,11 @@ namespace AlgorithmBasics.DataStructures.Heap
             T temp = this[l];
             this[l] = this[r];
             this[r] = temp;
+        }
+
+        public void Delete(T vertex)
+        {
+            throw new NotImplementedException();
         }
     }
 }

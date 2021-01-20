@@ -94,12 +94,11 @@ namespace AlgorithmBasics.DataStructures.Graph.GraphImplementations
 
         public IEnumerable<TVertex> GetIncomingVertices(TVertex v)
         {
-            _reversedList.TryGetValue(v, out var value);
-            if (value == null)
+            if (!_reversedList.ContainsKey(v))
             {
                 throw new ArgumentOutOfRangeException(nameof(v), "Vertex doesn't exist in reversed graph");
             }
-            return value;
+            return _reversedList[v].Select(node => node);
         }
 
         public override string ToString()

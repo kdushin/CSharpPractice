@@ -1,12 +1,14 @@
-using System;
 using System.Collections.Generic;
 using System.Linq;
 using AlgorithmBasics.DataStructures.Graph;
+using AlgorithmBasics.DataStructures.Heap;
 
 namespace AlgorithmBasics.Algorithms.Graphs
 {
     public static class GraphSearch
     {
+        #region Trivial Depth-first search and Breadth-first search implementations.
+
         public static IEnumerable<int> DepthFirst(IDirectedGraph<int> graph, int startVertex)
         {
             var exploredVertices = new HashSet<int>{startVertex};
@@ -73,127 +75,209 @@ namespace AlgorithmBasics.Algorithms.Graphs
             return exploredVertices.ContainsKey(endVertex) ? exploredVertices[endVertex] : int.MinValue;
         }
 
-        // 1. Let Grev = G with all arcs reversed     
-        // 2. Run DFS-Loop on Grev                     // goal: compute "magical ordering" of nodes
-        // Let f(v) = "finishing time" of each vertex v 
-        // 3. Run DFS-Loop on G                        // goal: discover the SCCs
-        // Processing nodes in decreasing order of finishing times.
-        /// <summary>
-        /// </summary>
-        public static Dictionary<int, int> FindStronglyConnectedComponents(IDirectedGraphWithReversed<int> graph)
+        #endregion
+
+        #region Find strongly connected components in graph. Kosaraju's two path algorithm implementation.
+
+        public static List<List<int>> FindStronglyConnectedComponents(IDirectedGraphWithReversed<int> graph)
         {
-            Dictionary<int, int> finishingTimes = CalculateFinishingTimes(graph, graph.GetVertices().ToList());
-            return ComputeStronglyConnectedComponents(graph, finishingTimes);
+            List<int> finishingTimesVertices = CalculateFinishingTimes(graph);
+            return ComputeStronglyConnectedComponents(graph, finishingTimesVertices);
         }
 
-        //   DFS-Loop(graph G)
-        //       - global variable t = 0                     // for finishing times in 1st pass
-        //       [# of nodes processed so far]
-        //       // assume nodes labeled from 1 to n.
-        //       - For i = n down to 1:
-        //           - if i not yet explored
-        //               - s:= i
-        //               - DFS(G, i)
-        private static Dictionary<int, int> CalculateFinishingTimes(IDirectedGraphWithReversed<int> graph, System.Collections.Generic.List<int> vertices)
+        private static List<int> CalculateFinishingTimes(IDirectedGraphWithReversed<int> graph)
         {
-            var finishingTimes = new Dictionary<int, int>();
-            int finishingTime = 0;
+            var finishedVertices = new List<int>();
             var exploredVertices = new HashSet<int>();
-            
-            // Sort vertices in descending order.
-            vertices.Sort((x, y) => y.CompareTo(x));
-            
-            foreach (int i in vertices)
+            foreach (int v in graph.GetVertices())
             {
-                if (!exploredVertices.Contains(i))
+                if (!exploredVertices.Contains(v))
                 {
-                    DepthFirstLocal(i);
+                    DfsCalculateFinishingTimes(graph, v, exploredVertices, finishedVertices);
                 }
             }
 
-            return finishingTimes;
-            
-            // DFS(graph G, node i)
-            //    - mark i as explored                            // for rest of DFS-Loop
-            //    - for each arc (i, j) in G:
-            //        - if j not yet explored:
-            //            - DFS(G, i)                             // change to iterative dfs not recursive
-            //    - t++
-            //    - set f(i) := t                                 // it's finishing time
-            void DepthFirstLocal(int startVertex)
+            return finishedVertices;
+        }
+
+        private static void DfsCalculateFinishingTimes(IDirectedGraphWithReversed<int> graph, 
+                                                       int startVertex, 
+                                                       HashSet<int> exploredVertices,
+                                                       List<int> finishedVertices)
+        {
+            var stack = new Stack<int>();
+            stack.Push(startVertex);
+
+            while (stack.Any())
             {
-                exploredVertices.Add(startVertex);
-                foreach (int j in graph.GetIncomingVertices(startVertex))
+                int v = stack.Peek();
+                if (!exploredVertices.Contains(v))
                 {
-                    if (!exploredVertices.Contains(j))
+                    exploredVertices.Add(v);
+                }
+
+                bool hasUnexploredNeighbours = false;
+                
+                
+                
+                
+                foreach (int w in graph.GetIncomingVertices(v))
+                {
+                    if (!exploredVertices.Contains(w))
                     {
-                        // TODO: change to iterative approach
-                        DepthFirstLocal(j);
+                        hasUnexploredNeighbours = true;
+                        stack.Push(w);
+                        break;
                     }
                 }
-                finishingTime++;
-                finishingTimes.Add(finishingTime, startVertex);
-                if (finishingTime > vertices.Count)
+                if (hasUnexploredNeighbours) continue;
+                finishedVertices.Add(stack.Pop());
+            }
+        }
+        
+        private static List<List<int>> ComputeStronglyConnectedComponents(IDirectedGraph<int> graph, 
+                                                                          List<int> finishingTimesVertices)
+        {
+            var sccList = new List<List<int>>();
+            var exploredVertices = new HashSet<int>();
+
+            for (int i = finishingTimesVertices.Count - 1; i >= 0; i--)
+            {
+                if (!exploredVertices.Contains(finishingTimesVertices[i]))
                 {
-                    Console.WriteLine($"Finishing time in graph is bigger than vertices count in graph. F - {finishingTime} V - {vertices.Count}");
+                    var foundSccs = new List<int>();
+                    DfsFindSccs(graph,
+                                startVertex: finishingTimesVertices[i],
+                                exploredVertices: exploredVertices,
+                                sccs: foundSccs);
+                    sccList.Add(foundSccs);
+                }
+            }
+
+            return sccList;
+        }
+        
+        private static void DfsFindSccs(IDirectedGraph<int> graph, 
+                                        int startVertex,
+                                        HashSet<int> exploredVertices,
+                                        List<int> sccs)
+        {
+            var stack = new Stack<int>();
+            stack.Push(startVertex);
+
+            while (stack.Any())
+            {
+                int v = stack.Peek();
+                if (!exploredVertices.Contains(v))
+                {
+                    exploredVertices.Add(v);
+                }
+                
+                bool hasUnexploredNeighbours = false;
+                foreach (int w in graph.GetAdjacentVertices(v))
+                {
+                    if (!exploredVertices.Contains(w))
+                    {
+                        hasUnexploredNeighbours = true;
+                        stack.Push(w);
+                        break;
+                    }
+                }
+                if (!hasUnexploredNeighbours)
+                {
+                    sccs.Add(stack.Pop());
+                }
+            }
+        }
+
+        #endregion
+
+        #region Dijkstra algorithm implementation. Compute shortest path
+
+        // DijkstraSearchNaive
+        // X - set of explored vertices of graph G
+        // V-X - set of unexplored vertices of graph G
+        //
+        // DijkstraSearchNaive(graph G, vertex s):
+        //     // Initialization
+        //     X = { s }
+        //     len(s) = 0, len(v) = +infinity for every v != s
+        //     // Main loop
+        //     while there is an edge (v, w) with v ∈ X, w ∈ X do
+        //         (v*, w*) = such an edge minimizing len(v) + l_vw
+        //         X.Add(w*)
+        //         len(w*) = len(v*) + l_v*w*
+        public static void DijkstraSearchNaive(IDirectedGraph<int> graph, int startVertex)
+        {
+            var x = new Dictionary<int, int> {{startVertex, 0}};
+            foreach (var vertex in graph.GetVertices().Where(i => i != startVertex))
+            {
+                x.Add(vertex, int.MaxValue);
+            }
+
+            foreach (KeyValuePair<int,int> pair in x)
+            {
+                
+            }
+        }
+        
+        // X - set of explored vertices of graph G
+        // V-X - set of unexplored vertices of graph G
+        //
+        // Invariant.
+        //     The key of a vertex w belongs to V-X is the min Dijkstra score of an edge with tail v belongs to X 
+        //     and head w, or +infinity if no such edge exists.
+        //
+        //     key(w) = min len(v) + l(vw)
+        //
+        // DijkstraSearch(graph G, vertex s):
+        //     // Initialization
+        //     X = empty set
+        //     H = empty min heap
+        //     key(s) = 0
+        //     for each vertex V in G.vertices do: key(V) = +infinity
+        //     for each vertex V in G.vertices do: H.Insert(V)
+        //     // Main loop
+        //     while H is not empty do:
+        //         w* = H.ExtractMin()
+        //         X.Add(w*)
+        //         len(w*) = key(w*)
+        //         // Update Heap to maintain Invariant
+        //         for every edge(w*, y) do:
+        //             H.Delete(y)     // Delete: given a heap H and a pointer to an object x in H, delete x from H.
+        //             key(y) = min {key(y), len(w*) + l(w*y)}
+        //             H.Insert(y)
+        public static void DijkstraSearchMinHeap(IDirectedGraph<int> graph, int startVertex)
+        {
+            // key - vertex, value - len(vertex)
+            var discoveredVerticesWithLength = new Dictionary<int, int>();
+            // key - vertex id, value - Dijkstra score
+            var minHeap = new MinHeap<(int, int)>();
+            minHeap.Insert((startVertex, 0));
+            foreach (int v in graph.GetVertices())
+            {
+                if (v != startVertex)
+                {
+                    minHeap.Insert((v, int.MaxValue));
+                }
+            }
+            // Main loop
+            while (!minHeap.IsEmpty())
+            {
+                // key - vertexId, value - DijkstraScore
+                (int, int) extractedW = minHeap.ExtractMin();
+                discoveredVerticesWithLength.Add(extractedW.Item1, extractedW.Item2);
+                // Update heap to maintain Invariant
+                foreach (int y in graph.GetAdjacentVertices(extractedW.Item1))
+                {
+                    var x = discoveredVerticesWithLength[y];
+                    minHeap.Delete((x, y));
+                    //(int, int) yWithKey = minHeap.Peek(y);
+                    //var newTuple = (y, Math.Min(yWithKey.Item2, extractedW.Item2 + len(extractedW)));
                 }
             }
         }
         
-        //   DFS-Loop(graph G)
-        //       - global variable s = null                  // for leaders in 2nd pass
-        //       [current source vertex]
-        //       // assume nodes labeled from 1 to n.
-        //       - For i = n down to 1:
-        //           - if i not yet explored
-        //               - s:= i
-        //               - DFS(G, i)
-        private static Dictionary<int, int> ComputeStronglyConnectedComponents(IDirectedGraph<int> graph, Dictionary<int, int> finishingTimes)
-        {
-            var leaders = new Dictionary<int, int>();
-            var exploredVertices = new HashSet<int>();
-            int leaderVertex;
-            
-            for (int i = finishingTimes.Count; i >= 1; i--)
-            {
-                int vertex = finishingTimes[i];
-                if (!exploredVertices.Contains(vertex))
-                {
-                    leaderVertex = vertex;
-                    DepthFirstLocal(vertex);
-                }
-            }
-
-            return leaders;
-            
-            // DFS(graph G, node i)
-            //    - mark i as explored                            // for rest of DFS-Loop
-            //    - set leader(i) := node s
-            //    - for each arc (i, j) in G:
-            //        - if j not yet explored:
-            //            - DFS(G, i)                             // change to iterative dfs not recursive
-            //    - t++
-            //    - set f(i) := t                                 // it's finishing time
-            void DepthFirstLocal(int startVertex)
-            {
-                exploredVertices.Add(startVertex);
-                if (leaders.ContainsKey(leaderVertex))
-                {
-                    leaders[leaderVertex]++;
-                }
-                else
-                {
-                    leaders.Add(leaderVertex, 1);
-                }
-                foreach (int j in graph.GetAdjacentVertices(startVertex))
-                {
-                    if (!exploredVertices.Contains(j))
-                    {
-                        // TODO: change to iterative approach
-                        DepthFirstLocal(j);
-                    }
-                }
-            }
-        }
+        #endregion
     }
 }
