@@ -1,11 +1,18 @@
 using System;
+using System.Collections.Generic;
 
 namespace AlgorithmBasics.DataStructures.Heap
 {
-    public class MinHeap<T> where T : IComparable<T>
+    public interface IIndexable<T>
+    {
+        int GetIndex();
+    }
+    
+    public class MinHeap<T> where T : IComparable<T>, IIndexable<T>
     {
         private T[] _arr;
         private int _heapSize;
+        private readonly Dictionary<int, int> _indexMap = new Dictionary<int, int>();
 
         private T this[int i]
         {
@@ -45,6 +52,7 @@ namespace AlgorithmBasics.DataStructures.Heap
             {
                 _heapSize = 1;
                 this[1] = item;
+                AddOrUpdateMap(item, 1);
             }
             else
             {
@@ -55,6 +63,7 @@ namespace AlgorithmBasics.DataStructures.Heap
                     Array.Resize(ref _arr, 2 * (_arr.Length + 1));
                 }
                 this[_heapSize] = item;
+                AddOrUpdateMap(item, _heapSize);
                 HeapifyUp(_heapSize);
             }
         }
@@ -117,16 +126,53 @@ namespace AlgorithmBasics.DataStructures.Heap
             }
         }
 
-        private void SwapItems(int l, int r)
+        public void SwapItems(int l, int r)
         {
-            T temp = this[l];
+            T leftTemp = this[l];
             this[l] = this[r];
-            this[r] = temp;
+            this[r] = leftTemp;
+
+            _indexMap[this[l].GetIndex()] = l;
+            _indexMap[this[r].GetIndex()] = r;
         }
 
-        public void Delete(T vertex)
+        public T Delete(int index)
         {
-            throw new NotImplementedException();
+            if (_heapSize == 0) { return default; }
+            
+            T result = default;
+            
+            if (_indexMap.TryGetValue(index, out int heapIndex))
+            {
+                _indexMap.Remove(index);
+
+                result = this[heapIndex];
+                this[heapIndex] = this[_heapSize];
+                _heapSize--;
+                
+                if (heapIndex == 1 || this[Parent(heapIndex)].CompareTo(this[heapIndex]) < 0)
+                {
+                    HeapifyDown(heapIndex);
+                }
+                else
+                {
+                    HeapifyUp(heapIndex);
+                }
+            }
+
+            return result;
+        }
+
+        private void AddOrUpdateMap(T item, int arrayIndex)
+        {
+            if (_indexMap.ContainsKey(item.GetIndex()))
+            {
+                _indexMap[item.GetIndex()] = arrayIndex;
+            }
+            else
+            {
+                _indexMap.Add(item.GetIndex(), arrayIndex);
+            }
         }
     }
 }

@@ -2,7 +2,7 @@ using System.Collections.Generic;
 
 namespace AlgorithmBasics.DataStructures.Graph
 {
-    public interface IDirectedGraph<TVertex>
+    public interface IDirectedWeightedGraph<TVertex>
     {
         /// <summary>
         /// Returns the number of vertices in this directed graph.
@@ -20,7 +20,7 @@ namespace AlgorithmBasics.DataStructures.Graph
         /// <summary>
         /// Returns all edges of current graph.
         /// </summary>
-        IEnumerable<(TVertex v1, TVertex v2)> GetEdges();
+        IEnumerable<(TVertex v, TVertex w, int weight)> GetEdges();
         
         void AddVertex(TVertex v);
 
@@ -29,29 +29,13 @@ namespace AlgorithmBasics.DataStructures.Graph
         /// </summary>
         /// <param name="v">the tail vertex</param>
         /// <param name="w">the head vertex</param>
-        void AddEdge(TVertex v, TVertex w);
+        /// <param name="weight"></param>
+        void AddEdge(TVertex v, TVertex w, int weight);
 
         /// <summary>
         /// Returns the vertices adjacent from vertex v in this directed graph. 
         /// </summary>
         /// <param name="v">vertex v</param>
-        IEnumerable<TVertex> GetAdjacentVertices(TVertex v);
-
-        // /// <summary>
-        // /// Returns the degree of vertex v.
-        // /// </summary>
-        // /// <param name="v">vertex</param>
-        // /// <returns></returns>
-        // int GetVertexDegree(int v);
-    }
-
-    public interface IDirectedGraphWithReversed<TVertex> : IDirectedGraph<TVertex>
-    {
-        /// <summary>
-        /// Returns outgoing vertices for specified vertex.
-        /// <para>There is an edge E with tail vertex v and head vertex w (v -> w).</para>
-        /// <para>Then GetIncomingVertices(w) returns vertex v</para>
-        /// </summary>
-        IEnumerable<TVertex> GetIncomingVertices(TVertex v);
+        IEnumerable<(TVertex w, int weight)> GetAdjacentVertices(TVertex v);
     }
 }

@@ -128,7 +128,7 @@ namespace AlgorithmBasics.DataStructures.Graph.GraphImplementations
 
     public static class GraphHelper 
     { 
-        public static IDirectedGraphWithReversed<int> ParseFromText(StreamReader reader, bool saveReversedVersion)
+        public static IDirectedGraphWithReversed<int> ParseFromTextDirectedGraph(StreamReader reader, bool saveReversedVersion)
         {
             var result = new DirectedGraphAdjList<int>(saveReversedVersion);
 
@@ -174,6 +174,40 @@ namespace AlgorithmBasics.DataStructures.Graph.GraphImplementations
             }
             
             return reversedGraph;
+        }
+
+        public static IDirectedWeightedGraph<int> ParseFromTextDirectedWeightedGraph(StreamReader reader)
+        {
+            var result = new DirectedWeightedGraph<int>();
+
+            while (!reader.EndOfStream)
+            {
+                string line = reader.ReadLine();
+                if (line == null) { continue; }
+                var items = line.Split(new[] {' ', '\t'}, StringSplitOptions.RemoveEmptyEntries);
+                var v = int.Parse(items[0]);
+                result.AddVertex(v);
+
+                for (int i = 1; i < items.Length; i++)
+                {
+                    string[] vertexWithWeight = items[i].Split(',');
+
+                    try
+                    {
+                        var w = int.Parse(vertexWithWeight[0]);
+                        var weight = int.Parse(vertexWithWeight[1]);
+                        result.AddVertex(w);
+                        result.AddEdge(v, w, weight);
+                    }
+                    catch (Exception e)
+                    {
+                        Console.WriteLine(e);
+                        throw;
+                    }
+                }
+            }
+
+            return result;
         }
     }
 }

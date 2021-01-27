@@ -6,6 +6,7 @@ using System.Linq;
 using AlgorithmBasics.Algorithms.Graphs;
 using AlgorithmBasics.DataStructures.Graph;
 using AlgorithmBasics.DataStructures.Graph.GraphImplementations;
+using AlgorithmBasics.DataStructures.Heap;
 using AlgorithmBasics.TestAssignments;
 
 namespace AlgorithmBasics
@@ -14,8 +15,8 @@ namespace AlgorithmBasics
     {
         public static void Main(string[] args)
         {
-            var path = @"C:\Projects\CSharpPractice\AlgorithmBasics\CourseTasks\GraphSearch\DirectedGraphs\SearchStronglyConnectedComponentsCases\SCC.txt";
-            TestFindStronglyConnectedComponents(path);
+            var path = @"C:\Projects\CSharpPractice\AlgorithmBasics\CourseTasks\GraphSearch\DijkstraSearch\Assignment.txt";
+            TestDijkstraSearch(path);
         }
 
         
@@ -75,7 +76,7 @@ namespace AlgorithmBasics
             IDirectedGraph<int> graph = null;
             using (var reader = new StreamReader(path))
             {
-                graph = GraphHelper.ParseFromText(reader, saveReversedVersion: false);
+                graph = GraphHelper.ParseFromTextDirectedGraph(reader, saveReversedVersion: false);
                 Console.WriteLine("Graph initiated!");
                 Console.WriteLine(graph);
             }
@@ -91,7 +92,7 @@ namespace AlgorithmBasics
             IDirectedGraph<int> graph = null;
             using (var reader = new StreamReader(path))
             {
-                graph = GraphHelper.ParseFromText(reader, saveReversedVersion: false);
+                graph = GraphHelper.ParseFromTextDirectedGraph(reader, saveReversedVersion: false);
                 Console.WriteLine("Graph initiated!");
                 Console.WriteLine(graph);
             }
@@ -106,7 +107,7 @@ namespace AlgorithmBasics
             IDirectedGraph<int> graph = null;
             using (var reader = new StreamReader(path))
             {
-                graph = GraphHelper.ParseFromText(reader, saveReversedVersion: false);
+                graph = GraphHelper.ParseFromTextDirectedGraph(reader, saveReversedVersion: false);
                 Console.WriteLine("Graph initiated!");
                 Console.WriteLine(graph);
             }
@@ -125,7 +126,7 @@ namespace AlgorithmBasics
             IDirectedGraphWithReversed<int> graph;
             using (var reader = new StreamReader(path))
             {
-                graph = GraphHelper.ParseFromText(reader, saveReversedVersion: true);
+                graph = GraphHelper.ParseFromTextDirectedGraph(reader, saveReversedVersion: true);
             }
 
             var results = GraphSearch.FindStronglyConnectedComponents(graph);
@@ -139,6 +140,56 @@ namespace AlgorithmBasics
                 var sccVertices = biggestSccs[i];
                 Console.WriteLine($"SCC #{i+1}: {sccVertices.Count}");
             }
+        }
+
+        private static void TestDijkstraSearch(string path)
+        {
+            IDirectedWeightedGraph<int> graph;
+            using (var reader = new StreamReader(path))
+            {
+                graph = GraphHelper.ParseFromTextDirectedWeightedGraph(reader);
+            }
+
+            var result = GraphSearch.DijkstraMinHeap(graph, 1);
+
+            int[] requiredPaths = {7, 37, 59, 82, 99, 115, 133, 165, 188, 197};
+            
+            foreach (int i in requiredPaths)
+            {
+                Console.WriteLine(result[i]);
+            }
+        }
+    }
+    
+    
+    
+
+    internal class Foo : IComparable<Foo>, IIndexable<Foo>, IComparable
+    {
+        public int Value { get; set; }
+
+        public Foo(int value)
+        {
+            Value = value;
+        }
+        
+        public int GetIndex()
+        {
+            return Value.GetHashCode();
+        }
+
+        public int CompareTo(Foo other)
+        {
+            if (ReferenceEquals(this, other)) return 0;
+            if (ReferenceEquals(null, other)) return 1;
+            return Value.CompareTo(other.Value);
+        }
+
+        public int CompareTo(object obj)
+        {
+            if (ReferenceEquals(null, obj)) return 1;
+            if (ReferenceEquals(this, obj)) return 0;
+            return obj is Foo other ? CompareTo(other) : throw new ArgumentException($"Object must be of type {nameof(Foo)}");
         }
     }
 }

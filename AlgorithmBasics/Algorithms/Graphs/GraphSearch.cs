@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using AlgorithmBasics.DataStructures.Graph;
@@ -194,40 +195,12 @@ namespace AlgorithmBasics.Algorithms.Graphs
 
         #region Dijkstra algorithm implementation. Compute shortest path
 
-        // DijkstraSearchNaive
-        // X - set of explored vertices of graph G
-        // V-X - set of unexplored vertices of graph G
-        //
-        // DijkstraSearchNaive(graph G, vertex s):
-        //     // Initialization
-        //     X = { s }
-        //     len(s) = 0, len(v) = +infinity for every v != s
-        //     // Main loop
-        //     while there is an edge (v, w) with v ∈ X, w ∈ X do
-        //         (v*, w*) = such an edge minimizing len(v) + l_vw
-        //         X.Add(w*)
-        //         len(w*) = len(v*) + l_v*w*
-        public static void DijkstraSearchNaive(IDirectedGraph<int> graph, int startVertex)
-        {
-            var x = new Dictionary<int, int> {{startVertex, 0}};
-            foreach (var vertex in graph.GetVertices().Where(i => i != startVertex))
-            {
-                x.Add(vertex, int.MaxValue);
-            }
-
-            foreach (KeyValuePair<int,int> pair in x)
-            {
-                
-            }
-        }
-        
         // X - set of explored vertices of graph G
         // V-X - set of unexplored vertices of graph G
         //
         // Invariant.
         //     The key of a vertex w belongs to V-X is the min Dijkstra score of an edge with tail v belongs to X 
         //     and head w, or +infinity if no such edge exists.
-        //
         //     key(w) = min len(v) + l(vw)
         //
         // DijkstraSearch(graph G, vertex s):
@@ -244,40 +217,94 @@ namespace AlgorithmBasics.Algorithms.Graphs
         //         len(w*) = key(w*)
         //         // Update Heap to maintain Invariant
         //         for every edge(w*, y) do:
-        //             H.Delete(y)     // Delete: given a heap H and a pointer to an object x in H, delete x from H.
+        //             H.Delete(y)     // Delete: given a heap H and a pointer to an object y in H, delete y from H.
         //             key(y) = min {key(y), len(w*) + l(w*y)}
         //             H.Insert(y)
-        public static void DijkstraSearchMinHeap(IDirectedGraph<int> graph, int startVertex)
+        public static int[] DijkstraMinHeap(IDirectedWeightedGraph<int> weightedGraph, int startVertex)
         {
-            // key - vertex, value - len(vertex)
-            var discoveredVerticesWithLength = new Dictionary<int, int>();
-            // key - vertex id, value - Dijkstra score
-            var minHeap = new MinHeap<(int, int)>();
-            minHeap.Insert((startVertex, 0));
-            foreach (int v in graph.GetVertices())
+            var minHeap = new MinHeap<ScoredVertex>(weightedGraph.VerticesCount);
+            var x = new HashSet<int> {startVertex};
+            var len = new int[weightedGraph.VerticesCount + 1];
+            
+            for (int i = 1; i <= weightedGraph.VerticesCount; i++)
             {
-                if (v != startVertex)
-                {
-                    minHeap.Insert((v, int.MaxValue));
-                }
+                len[i] = i == startVertex ? 0 : int.MaxValue;
             }
-            // Main loop
+            
+            foreach ((int w, int weight) in weightedGraph.GetAdjacentVertices(startVertex))
+            {
+                minHeap.Insert(new ScoredVertex{Vertex = w, Score = weight});
+            }
+            
             while (!minHeap.IsEmpty())
             {
-                // key - vertexId, value - DijkstraScore
-                (int, int) extractedW = minHeap.ExtractMin();
-                discoveredVerticesWithLength.Add(extractedW.Item1, extractedW.Item2);
-                // Update heap to maintain Invariant
-                foreach (int y in graph.GetAdjacentVertices(extractedW.Item1))
+                ScoredVertex v = minHeap.ExtractMin();
+                x.Add(v.Vertex);
+
+                len[v.Vertex] = v.Score;
+
+                foreach ((int w, int weight) in weightedGraph.GetAdjacentVertices(v.Vertex))
                 {
-                    var x = discoveredVerticesWithLength[y];
-                    minHeap.Delete((x, y));
-                    //(int, int) yWithKey = minHeap.Peek(y);
-                    //var newTuple = (y, Math.Min(yWithKey.Item2, extractedW.Item2 + len(extractedW)));
+                    if (!x.Contains(w))
+                    {
+                        ScoredVertex result = minHeap.Delete(w);
+                        var updatedVertex = new ScoredVertex
+                        {
+                            Vertex = w,
+                            Score = result?.Score == null ? v.Score + weight
+                                                          : Math.Min(v.Score + weight, result.Score)
+                        };
+                        minHeap.Insert(updatedVertex);
+                    }
                 }
             }
+
+            return len;
         }
-        
+
+        private static (int vertex, int weight) FindMinWeightVertex(IDirectedWeightedGraph<int> weightedGraph, (int tail, int head, int weight) edge)
+        {
+            (int minVertex, int minWeight) = (int.MaxValue, int.MaxValue);
+            foreach (var adjacentVertex in weightedGraph.GetAdjacentVertices(edge.tail))
+            {
+                if (adjacentVertex.weight < minWeight)
+                {
+                    minVertex = adjacentVertex.w;
+                    minWeight = adjacentVertex.weight;
+                }
+            }
+            
+            if (minVertex == int.MaxValue || minWeight == int.MaxValue)
+            {
+                Console.WriteLine($"minVertex = {minVertex}, minWeight = {minWeight}");
+            }
+            return (minVertex, minWeight);
+        }
         #endregion
+    }
+
+    public class ScoredVertex : IComparable<ScoredVertex>, IIndexable<ScoredVertex>
+    {
+        public int Score { get; set; }
+        public int Vertex { get; set; }
+
+        public int CompareTo(ScoredVertex other)
+        {
+            if (ReferenceEquals(this, other)) return 0;
+            if (ReferenceEquals(null, other)) return 1;
+            return Score.CompareTo(other.Score);
+        }
+
+        public int CompareTo(object obj)
+        {
+            if (ReferenceEquals(null, obj)) return 1;
+            if (ReferenceEquals(this, obj)) return 0;
+            return obj is ScoredVertex other ? CompareTo(other) : throw new ArgumentException($"Object must be of type {nameof(ScoredVertex)}");
+        }
+
+        public int GetIndex()
+        {
+            return Vertex;
+        }
     }
 }

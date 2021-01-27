@@ -201,7 +201,7 @@ namespace AlgorithmBasics.TestAssignments
         }
     }
     
-    public class LineHandler : IComparable<LineHandler>
+    public class LineHandler : IComparable<LineHandler>, IIndexable<LineHandler>
     {
         public string ChunkPath { get; }
         public string Line { get; }
@@ -226,6 +226,11 @@ namespace AlgorithmBasics.TestAssignments
         {
             var res = string.CompareOrdinal(this._strValue, other._strValue);
             return res != 0 ? res : this._number.CompareTo(other._number);
+        }
+
+        public int GetIndex()
+        {
+            return _strValue.GetHashCode();
         }
     }
 }

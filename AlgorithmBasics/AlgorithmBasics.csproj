@@ -61,6 +61,8 @@
     <Compile Include="Algorithms\Sorting\NumberOfInversions.cs" />
     <Compile Include="DataStructures\Graph\AdjacencyList.cs" />
     <Compile Include="DataStructures\Graph\GraphImplementations\DirectedGraphList.cs" />
+    <Compile Include="DataStructures\Graph\GraphImplementations\DirectedWeightedGraph.cs" />
+    <Compile Include="DataStructures\Graph\IDirectedWeightedGraph.cs" />
     <Compile Include="DataStructures\Graph\IGraph.cs" />
     <Compile Include="DataStructures\Heap\MaxHeap.cs" />
     <Compile Include="DataStructures\Heap\MinHeap.cs" />
@@ -74,6 +76,10 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="CourseTasks\GraphSearch\DijkstraSearch\Assignment.txt" />
+    <Content Include="CourseTasks\GraphSearch\DijkstraSearch\ExpectedResults.txt" />
+    <Content Include="CourseTasks\GraphSearch\DijkstraSearch\README.txt" />
+    <Content Include="CourseTasks\GraphSearch\DijkstraSearch\TestCase.txt" />
     <Content Include="CourseTasks\GraphSearch\DirectedGraphs\SearchStronglyConnectedComponentsCases\BaseCase.txt" />
     <Content Include="CourseTasks\GraphSearch\DirectedGraphs\SearchStronglyConnectedComponentsCases\ExpectedResults.txt" />
     <Content Include="CourseTasks\GraphSearch\DirectedGraphs\SearchStronglyConnectedComponentsCases\SCC.txt" />
