@@ -222,15 +222,14 @@ namespace AlgorithmBasics.Algorithms.Graphs
         //             H.Insert(y)
         public static int[] DijkstraMinHeap(IDirectedWeightedGraph<int> weightedGraph, int startVertex)
         {
-            var minHeap = new MinHeap<ScoredVertex>(weightedGraph.VerticesCount);
+            var minHeap = new MinHeap<ScoredVertex>(new ScoredVertex{Score = 0, Vertex = startVertex});
             var x = new HashSet<int> {startVertex};
             var len = new int[weightedGraph.VerticesCount + 1];
             
             for (int i = 1; i <= weightedGraph.VerticesCount; i++)
             {
-                len[i] = i == startVertex ? 0 : int.MaxValue;
+                len[i] = i == startVertex ? 0 : 1000000;
             }
-            
             foreach ((int w, int weight) in weightedGraph.GetAdjacentVertices(startVertex))
             {
                 minHeap.Insert(new ScoredVertex{Vertex = w, Score = weight});
