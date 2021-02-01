@@ -66,6 +66,7 @@
     <Compile Include="DataStructures\Graph\IGraph.cs" />
     <Compile Include="DataStructures\Heap\MaxHeap.cs" />
     <Compile Include="DataStructures\Heap\MinHeap.cs" />
+    <Compile Include="DataStructures\Heap\IndexMinHeap.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="TestAssignments\ExternalSortAssignment.cs" />
@@ -80,6 +81,7 @@
     <Content Include="CourseTasks\GraphSearch\DijkstraSearch\ExpectedResults.txt" />
     <Content Include="CourseTasks\GraphSearch\DijkstraSearch\README.txt" />
     <Content Include="CourseTasks\GraphSearch\DijkstraSearch\TestCase.txt" />
+    <Content Include="CourseTasks\GraphSearch\DijkstraSearch\TestCase2.txt" />
     <Content Include="CourseTasks\GraphSearch\DirectedGraphs\SearchStronglyConnectedComponentsCases\BaseCase.txt" />
     <Content Include="CourseTasks\GraphSearch\DirectedGraphs\SearchStronglyConnectedComponentsCases\ExpectedResults.txt" />
     <Content Include="CourseTasks\GraphSearch\DirectedGraphs\SearchStronglyConnectedComponentsCases\SCC.txt" />

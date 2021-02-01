@@ -8,7 +8,7 @@ namespace AlgorithmBasics.DataStructures.Heap
         int GetIndex();
     }
     
-    public class MinHeap<T> where T : IComparable<T>, IIndexable<T>
+    public class MinHeap<T> where T : IComparable<T>
     {
         private T[] _arr;
         private int _heapSize;
@@ -52,7 +52,6 @@ namespace AlgorithmBasics.DataStructures.Heap
             {
                 _heapSize = 1;
                 this[1] = item;
-                AddOrUpdateMap(item, 1);
             }
             else
             {
@@ -63,7 +62,6 @@ namespace AlgorithmBasics.DataStructures.Heap
                     Array.Resize(ref _arr, 2 * (_arr.Length + 1));
                 }
                 this[_heapSize] = item;
-                AddOrUpdateMap(item, _heapSize);
                 HeapifyUp(_heapSize);
             }
         }
@@ -132,8 +130,7 @@ namespace AlgorithmBasics.DataStructures.Heap
             this[l] = this[r];
             this[r] = leftTemp;
 
-            _indexMap[this[l].GetIndex()] = l;
-            _indexMap[this[r].GetIndex()] = r;
+           
         }
 
         public T Delete(int index)
@@ -163,16 +160,5 @@ namespace AlgorithmBasics.DataStructures.Heap
             return result;
         }
 
-        private void AddOrUpdateMap(T item, int arrayIndex)
-        {
-            if (_indexMap.ContainsKey(item.GetIndex()))
-            {
-                _indexMap[item.GetIndex()] = arrayIndex;
-            }
-            else
-            {
-                _indexMap.Add(item.GetIndex(), arrayIndex);
-            }
-        }
     }
 }

@@ -15,8 +15,14 @@ namespace AlgorithmBasics
     {
         public static void Main(string[] args)
         {
-            var path = @"C:\Projects\CSharpPractice\AlgorithmBasics\CourseTasks\GraphSearch\DijkstraSearch\Assignment.txt";
-            TestDijkstraSearch(path);
+            var path = @"insert path to file from CourseTasks folder here";
+            
+            // call method for specific algorithm here
+            var result = TestDijkstraSearch(path);
+            
+            // print out result here
+            Console.WriteLine("Program finished");
+            Console.ReadLine();
         }
 
         
@@ -141,8 +147,8 @@ namespace AlgorithmBasics
                 Console.WriteLine($"SCC #{i+1}: {sccVertices.Count}");
             }
         }
-
-        private static void TestDijkstraSearch(string path)
+        
+        private static List<int> TestDijkstraSearch(string path)
         {
             IDirectedWeightedGraph<int> graph;
             using (var reader = new StreamReader(path))
@@ -150,46 +156,12 @@ namespace AlgorithmBasics
                 graph = GraphHelper.ParseFromTextDirectedWeightedGraph(reader);
             }
 
-            var result = GraphSearch.DijkstraMinHeap(graph, 1);
+            int[] result = GraphSearch.DijkstraMinHeap(graph, 1);
 
-            int[] requiredPaths = {7, 37, 59, 82, 99, 115, 133, 165, 188, 197};
+            int[] requiredPaths = {7,37,59,82,99,115,133,165,188,197};
             
-            foreach (int i in requiredPaths)
-            {
-                Console.WriteLine(result[i]);
-            }
-        }
-    }
-    
-    
-    
-
-    internal class Foo : IComparable<Foo>, IIndexable<Foo>, IComparable
-    {
-        public int Value { get; set; }
-
-        public Foo(int value)
-        {
-            Value = value;
-        }
-        
-        public int GetIndex()
-        {
-            return Value.GetHashCode();
-        }
-
-        public int CompareTo(Foo other)
-        {
-            if (ReferenceEquals(this, other)) return 0;
-            if (ReferenceEquals(null, other)) return 1;
-            return Value.CompareTo(other.Value);
-        }
-
-        public int CompareTo(object obj)
-        {
-            if (ReferenceEquals(null, obj)) return 1;
-            if (ReferenceEquals(this, obj)) return 0;
-            return obj is Foo other ? CompareTo(other) : throw new ArgumentException($"Object must be of type {nameof(Foo)}");
+            return requiredPaths.Select(i => result[i])
+                                .ToList();
         }
     }
 }

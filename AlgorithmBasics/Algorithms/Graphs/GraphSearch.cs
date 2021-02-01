@@ -222,38 +222,37 @@ namespace AlgorithmBasics.Algorithms.Graphs
         //             H.Insert(y)
         public static int[] DijkstraMinHeap(IDirectedWeightedGraph<int> weightedGraph, int startVertex)
         {
-            var minHeap = new MinHeap<ScoredVertex>(new ScoredVertex{Score = 0, Vertex = startVertex});
-            var x = new HashSet<int> {startVertex};
+            var minHeap = new IndexMinHeap<int>(weightedGraph.VerticesCount);
+            var exploredVertices = new HashSet<int> {startVertex};
             var len = new int[weightedGraph.VerticesCount + 1];
             
             for (int i = 1; i <= weightedGraph.VerticesCount; i++)
             {
-                len[i] = i == startVertex ? 0 : 1000000;
-            }
-            foreach ((int w, int weight) in weightedGraph.GetAdjacentVertices(startVertex))
-            {
-                minHeap.Insert(new ScoredVertex{Vertex = w, Score = weight});
+                var score = i == startVertex ? 0 : 1000000;
+                len[i] = score;
+                minHeap.Insert(i, score);
             }
             
             while (!minHeap.IsEmpty())
             {
-                ScoredVertex v = minHeap.ExtractMin();
-                x.Add(v.Vertex);
+                int u = minHeap.GetMin();
+                len[u] = minHeap.GetItemKey(u);
+                minHeap.ExtractMin();
+                exploredVertices.Add(u);
 
-                len[v.Vertex] = v.Score;
-
-                foreach ((int w, int weight) in weightedGraph.GetAdjacentVertices(v.Vertex))
+                foreach ((int v, int weight) in weightedGraph.GetAdjacentVertices(u))
                 {
-                    if (!x.Contains(w))
+                    if (!exploredVertices.Contains(v))
                     {
-                        ScoredVertex result = minHeap.Delete(w);
-                        var updatedVertex = new ScoredVertex
+                        if (len[v] > len[u] + weight)
                         {
-                            Vertex = w,
-                            Score = result?.Score == null ? v.Score + weight
-                                                          : Math.Min(v.Score + weight, result.Score)
-                        };
-                        minHeap.Insert(updatedVertex);
+                            int vKey = minHeap.GetItemKey(v);
+                            int newScore = Math.Min(len[u] + weight, vKey);
+                            // can use (minHeap.Delete + minHeap.Insert) instead of DecreaseKey
+                            // but this would be less effective
+                            minHeap.DecreaseKey(v, newScore); 
+                            len[v] = newScore;
+                        }
                     }
                 }
             }
@@ -280,30 +279,5 @@ namespace AlgorithmBasics.Algorithms.Graphs
             return (minVertex, minWeight);
         }
         #endregion
-    }
-
-    public class ScoredVertex : IComparable<ScoredVertex>, IIndexable<ScoredVertex>
-    {
-        public int Score { get; set; }
-        public int Vertex { get; set; }
-
-        public int CompareTo(ScoredVertex other)
-        {
-            if (ReferenceEquals(this, other)) return 0;
-            if (ReferenceEquals(null, other)) return 1;
-            return Score.CompareTo(other.Score);
-        }
-
-        public int CompareTo(object obj)
-        {
-            if (ReferenceEquals(null, obj)) return 1;
-            if (ReferenceEquals(this, obj)) return 0;
-            return obj is ScoredVertex other ? CompareTo(other) : throw new ArgumentException($"Object must be of type {nameof(ScoredVertex)}");
-        }
-
-        public int GetIndex()
-        {
-            return Vertex;
-        }
     }
 }
