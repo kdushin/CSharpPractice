@@ -3,10 +3,12 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
+using AlgorithmBasics.Algorithms.BinarySearch;
 using AlgorithmBasics.Algorithms.Graphs;
 using AlgorithmBasics.DataStructures.Graph;
 using AlgorithmBasics.DataStructures.Graph.GraphImplementations;
 using AlgorithmBasics.DataStructures.Heap;
+using AlgorithmBasics.DataStructures.Tree;
 using AlgorithmBasics.TestAssignments;
 
 namespace AlgorithmBasics
@@ -18,7 +20,42 @@ namespace AlgorithmBasics
             var path = @"insert path to file from CourseTasks folder here";
             
             // call method for specific algorithm here
-            var result = TestDijkstraSearch(path);
+            var node8 = new BstNode(8);
+            node8.Root = node8;
+            var node3 = new BstNode(3);
+            var node10 = new BstNode(10);
+            var node1 = new BstNode(1);
+            var node6 = new BstNode(6);
+            var node14 = new BstNode(14);
+            var node13 = new BstNode(13);
+
+            node8.Insert(node3);
+            node8.Insert(node10);
+            node8.Insert(node1);
+            node8.Insert(node6);
+            node8.Insert(node14);
+            node8.Insert(node13);
+            
+            // node8.LinkToNode(null, node3, node10);
+            // node3.LinkToNode(node8, node1, node6);
+            // node10.LinkToNode(node8, null, node14);
+            // node1.LinkToNode(node3);
+            // node6.LinkToNode(node3);
+            // node14.LinkToNode(node10, node13);
+            // node13.LinkToNode(node14);
+            
+            BstNode.Print(node8);
+
+            var found6 = BstNode.Search(node8, 6);
+            var found13 = BstNode.Search(node8, 13);
+
+            BstNode succ14 = BstNode.Successor(node14);
+            BstNode succ6 = BstNode.Successor(node6);
+            BstNode succ3 = BstNode.Successor(node3);
+            
+            BstNode pre1 = BstNode.Predecessor(node1);
+            BstNode pre8 = BstNode.Predecessor(node8);
+            BstNode pre6 = BstNode.Predecessor(node6);
             
             // print out result here
             Console.WriteLine("Program finished");

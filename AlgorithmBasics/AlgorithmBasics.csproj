@@ -67,6 +67,7 @@
     <Compile Include="DataStructures\Heap\MaxHeap.cs" />
     <Compile Include="DataStructures\Heap\MinHeap.cs" />
     <Compile Include="DataStructures\Heap\IndexMinHeap.cs" />
+    <Compile Include="DataStructures\Tree\BstNode.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="TestAssignments\ExternalSortAssignment.cs" />
