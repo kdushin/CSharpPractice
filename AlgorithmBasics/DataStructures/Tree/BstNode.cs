@@ -2,46 +2,32 @@
 
 namespace AlgorithmBasics.DataStructures.Tree
 {
+    public class BinarySearchTree
+    {
+        public BstNode Root { get; set; }
+
+        public BinarySearchTree(BstNode root)
+        {
+            Root = root;
+        }
+    }
+
+
     public class BstNode
     {
         public BstNode Parent { get; set; }
-        
+
         public BstNode Left { get; set; }
-        
+
         public BstNode Right { get; set; }
-        
+
+        public int Size { get; set; }
+
         public int Key { get; }
 
         public BstNode(int key)
         {
             Key = key;
-        }
-
-        public void Insert(BinarySearchTree tree, BstNode insertionNode)
-        {
-            BstNode previousNode = null;
-            BstNode currentNode = tree.Root;
-
-            while (currentNode != null)
-            {
-                previousNode = currentNode;
-                currentNode = insertionNode.Key < currentNode.Key ? currentNode.Left : currentNode.Right;
-            }
-
-            insertionNode.Parent = previousNode;
-
-            if (previousNode == null)
-            {
-                tree.Root = insertionNode;
-            }
-            else if (insertionNode.Key < previousNode.Key)
-            {
-                previousNode.Left = insertionNode;
-            }
-            else
-            {
-                previousNode.Right = insertionNode;
-            }
         }
 
         public static void Print(BstNode treeNode)
@@ -56,15 +42,15 @@ namespace AlgorithmBasics.DataStructures.Tree
 
         public static BstNode Search(BstNode start, int key)
         {
-            while (start != null && key != start.Key)
+            while (start != null && key == start.Key)
             {
-                if (key < start.Key)
+                if (key > start.Key)
                 {
-                    start = start.Left;
+                    start = start.Right;
                 }
                 else
                 {
-                    start = start.Right;
+                    start = start.Left;
                 }
             }
 
@@ -77,15 +63,17 @@ namespace AlgorithmBasics.DataStructures.Tree
             {
                 searchNode = searchNode.Left;
             }
+
             return searchNode;
         }
-        
+
         public static BstNode Max(BstNode searchNode)
         {
             while (searchNode.Right != null)
             {
                 searchNode = searchNode.Right;
             }
+
             return searchNode;
         }
 
@@ -95,7 +83,7 @@ namespace AlgorithmBasics.DataStructures.Tree
             {
                 throw new ArgumentNullException();
             }
-            
+
             if (node.Right != null)
             {
                 return Min(node.Right);
@@ -108,6 +96,7 @@ namespace AlgorithmBasics.DataStructures.Tree
                     node = parent;
                     parent = parent.Parent;
                 }
+
                 return parent;
             }
         }
@@ -116,7 +105,7 @@ namespace AlgorithmBasics.DataStructures.Tree
         {
             if (node == null)
             {
-                throw new ArgumentException();
+                throw new ArgumentNullException();
             }
 
             if (node.Left != null)
@@ -131,7 +120,35 @@ namespace AlgorithmBasics.DataStructures.Tree
                     node = parent;
                     parent = parent.Parent;
                 }
+
                 return parent;
+            }
+        }
+
+        public void Insert(BinarySearchTree tree, BstNode insertionNode)
+        {
+            BstNode currentNode = tree.Root;
+            BstNode previousNode = null;
+
+            while (currentNode != null)
+            {
+                currentNode.Size++;
+                previousNode = currentNode;
+                currentNode = insertionNode.Key < currentNode.Key ? currentNode.Left : currentNode.Right;
+            }
+
+            insertionNode.Parent = previousNode;
+            if (previousNode == null)
+            {
+                tree.Root = insertionNode;
+            }
+            else if (insertionNode.Key >= previousNode.Key)
+            {
+                previousNode.Right = insertionNode;
+            }
+            else
+            {
+                previousNode.Left = insertionNode;
             }
         }
 
@@ -139,30 +156,31 @@ namespace AlgorithmBasics.DataStructures.Tree
         {
             if (z.Left == null)
             {
-                Transplant(t, z, z.Right);
+                TransplantParents(t, z, z.Right);
             }
             else if (z.Right == null)
             {
-                Transplant(t, z, z.Left);
+                TransplantParents(t, z, z.Left);
             }
             else
             {
                 BstNode y = Min(z.Right);
                 if (y.Parent != z)
                 {
-                    Transplant(t, y, y.Right);
+                    TransplantParents(t, y, y.Right);
                     y.Right = z.Right;
                     y.Right.Parent = y;
                 }
-                Transplant(t, z, y);
+
+                TransplantParents(t, z, y);
                 y.Left = z.Left;
                 y.Left.Parent = y;
             }
         }
 
-        private static void Transplant(BinarySearchTree t,
-                                       BstNode u,
-                                       BstNode v)
+        // Replaces the subtree rooted at node u with the subtree rooted at node v, node u’s parent becomes node
+        // v’s parent, and u’s parent ends up having v as its appropriate child
+        private static void TransplantParents(BinarySearchTree t, BstNode u, BstNode v)
         {
             if (u.Parent == null)
             {
@@ -180,23 +198,34 @@ namespace AlgorithmBasics.DataStructures.Tree
             if (v != null)
             {
                 v.Parent = u.Parent;
+                BstNode someNode = v.Parent;
+                while (someNode?.Parent != null)
+                {
+                    someNode.Size--;
+                    someNode = someNode.Parent;
+                }
             }
         }
-    }
 
-    public class BinarySearchTree
-    {
-        public BstNode Root { get; set; }
-
-        public BinarySearchTree(BstNode root)
+        public static BstNode SelectKthItem(BinarySearchTree t, int k)
         {
-            Root = root;
+            BstNode item = t.Root;
+
+            while (k != 0 && item != null)
+            {
+                int leftSize = item.Left?.Size ?? 0;
+                if (leftSize >= k)
+                {
+                    item = item.Left;
+                }
+                else
+                {
+                    k = k - leftSize - 1;
+                    item = item.Right;
+                }
+            }
+
+            return item;
         }
     }
-
-    public static class BstHelper
-    {
-        
-    }
-
 }
