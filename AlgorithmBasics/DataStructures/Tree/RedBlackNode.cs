@@ -1,4 +1,6 @@
-﻿namespace AlgorithmBasics.DataStructures.Tree
+﻿using System;
+
+namespace AlgorithmBasics.DataStructures.Tree
 {
     public class RedBlackTree
     {
@@ -117,7 +119,7 @@
 
         private static RedBlackNode Foo(RedBlackTree T, RedBlackNode uncle)
         {
-            
+            throw new NotImplementedException();
         }
 
         public static void LeftRotate(RedBlackTree tree, RedBlackNode x)

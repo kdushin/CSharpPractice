@@ -9,11 +9,11 @@ namespace AlgorithmBasics.Algorithms.Graphs
 {
     public class MinimumCuts
     {
-        public static Dictionary<int, List<int>> ParseGraph(string fileName)
+        public static Dictionary<int, List<int>> ParseGraph(string filePath)
         {
             var result = new Dictionary<int, List<int>>();
             
-            foreach (string line in File.ReadLines(fileName))
+            foreach (string line in File.ReadLines(filePath))
             {
                 string[] x = line.Split(new[] {'\t', ' '}, StringSplitOptions.RemoveEmptyEntries);
                 if (x.Any())
