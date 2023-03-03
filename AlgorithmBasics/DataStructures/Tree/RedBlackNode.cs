@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace AlgorithmBasics.DataStructures.Tree
+﻿namespace AlgorithmBasics.DataStructures.Tree
 {
     public class RedBlackTree
     {

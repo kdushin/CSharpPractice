@@ -1,6 +1,3 @@
-using System;
-using System.Collections.Generic;
-
 namespace AlgorithmBasics.DataStructures.Heap
 {
     public interface IIndexable<T>

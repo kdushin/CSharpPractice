@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading;
-using System.Threading.Tasks;
-
-namespace AlgorithmBasics.TestAssignments
+﻿namespace AlgorithmBasics.TestAssignments
 {
     public class Foo
     {
@@ -24,7 +18,7 @@ namespace AlgorithmBasics.TestAssignments
             try
             {
                 _mutex.WaitOne();
-                _criticalSection.Add(item);
+                // _criticalSection.Add(item);
             }
             finally
             {

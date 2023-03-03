@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace AlgorithmBasics.Algorithms.Sorting
+﻿namespace AlgorithmBasics.Algorithms.Sorting
 {
     public static class Merge
     {

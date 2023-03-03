@@ -1,5 +1,3 @@
-using System.Collections.Generic;
-
 namespace AlgorithmBasics.DataStructures.Graph
 {
     public interface IDirectedWeightedGraph<TVertex>

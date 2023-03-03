@@ -1,5 +1,3 @@
-using System;
-
 namespace AlgorithmBasics.DataStructures.Heap
 {
     // TODO: consider to change _heapIndexes, _heapArray, _keys to dictionaries in order to maintain generic Index

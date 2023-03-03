@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-
-namespace AlgorithmBasics.DataStructures.Graph.GraphImplementations
+﻿namespace AlgorithmBasics.DataStructures.Graph.GraphImplementations
 {
     public class UndirectedWeightedGraph<TVertex> : IUndirectedWeightedGraph<TVertex>
     {

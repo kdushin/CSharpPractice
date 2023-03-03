@@ -1,6 +1,4 @@
-﻿using System.Collections.Generic;
-
-namespace AlgorithmBasics.DataStructures.Graph
+﻿namespace AlgorithmBasics.DataStructures.Graph
 {
     public interface IUndirectedWeightedGraph<TVertex>
     {

@@ -1,6 +1,4 @@
-﻿using System.Collections.Generic;
-
-namespace AlgorithmBasics.Algorithms.Sorting
+﻿namespace AlgorithmBasics.Algorithms.Sorting
 {
     public class NumberOfInversions
     {

@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using AlgorithmBasics.DataStructures.Graph;
+﻿using AlgorithmBasics.DataStructures.Graph;
 using AlgorithmBasics.DataStructures.Graph.GraphImplementations;
 
 namespace AlgorithmBasics.Algorithms.GreedyAlgorithms
