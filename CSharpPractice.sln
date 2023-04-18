@@ -7,6 +7,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AlgorithmBasics", "Algorith
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Tests", "Tests\Tests.csproj", "{4449D86C-F2BF-4D74-9B97-176067445E43}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AlgorithmTasks", "AlgorithmTasks\AlgorithmTasks.csproj", "{D9F0496B-240A-44ED-8E85-6D2AF0B9FAF7}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -21,6 +23,10 @@ Global
 		{4449D86C-F2BF-4D74-9B97-176067445E43}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{4449D86C-F2BF-4D74-9B97-176067445E43}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{4449D86C-F2BF-4D74-9B97-176067445E43}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D9F0496B-240A-44ED-8E85-6D2AF0B9FAF7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D9F0496B-240A-44ED-8E85-6D2AF0B9FAF7}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D9F0496B-240A-44ED-8E85-6D2AF0B9FAF7}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D9F0496B-240A-44ED-8E85-6D2AF0B9FAF7}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

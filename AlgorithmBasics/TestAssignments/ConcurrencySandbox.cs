@@ -18,6 +18,7 @@
             try
             {
                 _mutex.WaitOne();
+                // TODO: fix me? 
                 // _criticalSection.Add(item);
             }
             finally
